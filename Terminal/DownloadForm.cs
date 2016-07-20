@@ -57,6 +57,9 @@ namespace Terminal
 
 		public void Browse()
 		{
+			if( string.IsNullOrWhiteSpace( Filename ) )
+				Filename = "Filename.txt";
+
 			string folder = Path.GetDirectoryName( Filename );
 			if( string.IsNullOrWhiteSpace( folder ))
 				folder = Environment.GetFolderPath( Environment.SpecialFolder.Desktop );
