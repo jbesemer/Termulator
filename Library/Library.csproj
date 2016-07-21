@@ -48,6 +48,7 @@
     <Compile Include="ComPortInfo.cs" />
     <Compile Include="Dbt.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Nummers.cs" />
     <Compile Include="PortManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnicodeControlCharacters.cs" />

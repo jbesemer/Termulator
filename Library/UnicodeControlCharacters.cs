@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Terminal
+namespace Library
 {
 	[Flags]
 	public enum SelectedVisibleCharacters { NL_to_CRLF, CR_to_CRLF, ShowWhitespace, ShowNewlines, ShowNonprinting }
