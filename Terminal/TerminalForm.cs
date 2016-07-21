@@ -26,7 +26,7 @@ namespace Terminal
 	{
 		#region // Constants, Properties //////////////////////////////////////
 
-		public const string Version = "1.6";
+		public const string Version = "1.7";
 
 		public const string HELP_FILENAME = @"Termulator.pdf";
 

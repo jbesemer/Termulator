@@ -41,7 +41,7 @@
 			// BrowseButton
 			// 
 			this.BrowseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.BrowseButton.Location = new System.Drawing.Point(359, 2);
+			this.BrowseButton.Location = new System.Drawing.Point(331, 33);
 			this.BrowseButton.Name = "BrowseButton";
 			this.BrowseButton.Size = new System.Drawing.Size(64, 27);
 			this.BrowseButton.TabIndex = 0;
@@ -64,7 +64,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.FilenameTextBox.Location = new System.Drawing.Point(67, 6);
 			this.FilenameTextBox.Name = "FilenameTextBox";
-			this.FilenameTextBox.Size = new System.Drawing.Size(286, 20);
+			this.FilenameTextBox.Size = new System.Drawing.Size(258, 20);
 			this.FilenameTextBox.TabIndex = 2;
 			// 
 			// label2
@@ -88,15 +88,15 @@
 			this.TraceDataCheckBox.AutoSize = true;
 			this.TraceDataCheckBox.Location = new System.Drawing.Point(172, 39);
 			this.TraceDataCheckBox.Name = "TraceDataCheckBox";
-			this.TraceDataCheckBox.Size = new System.Drawing.Size(105, 17);
+			this.TraceDataCheckBox.Size = new System.Drawing.Size(102, 17);
 			this.TraceDataCheckBox.TabIndex = 5;
-			this.TraceDataCheckBox.Text = "Trace Data Sent";
+			this.TraceDataCheckBox.Text = "Echo Data Sent";
 			this.TraceDataCheckBox.UseVisualStyleBackColor = true;
 			// 
 			// DownloadButton
 			// 
 			this.DownloadButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.DownloadButton.Location = new System.Drawing.Point(359, 33);
+			this.DownloadButton.Location = new System.Drawing.Point(331, 2);
 			this.DownloadButton.Name = "DownloadButton";
 			this.DownloadButton.Size = new System.Drawing.Size(64, 26);
 			this.DownloadButton.TabIndex = 6;
@@ -110,7 +110,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.ProgressBar.Location = new System.Drawing.Point(15, 63);
 			this.ProgressBar.Name = "ProgressBar";
-			this.ProgressBar.Size = new System.Drawing.Size(408, 8);
+			this.ProgressBar.Size = new System.Drawing.Size(380, 8);
 			this.ProgressBar.Step = 1;
 			this.ProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
 			this.ProgressBar.TabIndex = 7;
@@ -119,7 +119,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(435, 77);
+			this.ClientSize = new System.Drawing.Size(407, 77);
 			this.Controls.Add(this.ProgressBar);
 			this.Controls.Add(this.DownloadButton);
 			this.Controls.Add(this.TraceDataCheckBox);
