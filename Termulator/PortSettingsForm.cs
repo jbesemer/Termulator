@@ -26,6 +26,8 @@ namespace Termulator
 
 		public static EnterSends EnterSends { get; private set; }
 
+        public bool AutoReconnect;
+
 		public PortSettingsForm( SerialPort port )
 		{
 			InitializeComponent();
@@ -43,7 +45,9 @@ namespace Termulator
 		{
 			this.CenterToParent();
 
-			if( Port != null )
+            AutoReconnectCheckBox.Checked = AutoReconnect;
+
+            if( Port != null )
 			{
 				LoadSettingsFromPort( Port );
 				Text = Port.PortName + " Settings";
@@ -58,7 +62,9 @@ namespace Termulator
 
 		private void OK_Button_Click( object sender, EventArgs e )
 		{
-			SaveSettingsToPort( Port );
+            AutoReconnect = AutoReconnectCheckBox.Checked;
+
+            SaveSettingsToPort( Port );
 		}
 
 		private void ObisModeButton_Click( object sender, EventArgs e )

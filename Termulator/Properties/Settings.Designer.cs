@@ -151,5 +151,17 @@ namespace Termulator.Properties {
                 this["DownloadTraceDataSent"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoReconnect {
+            get {
+                return ((bool)(this["AutoReconnect"]));
+            }
+            set {
+                this["AutoReconnect"] = value;
+            }
+        }
     }
 }
