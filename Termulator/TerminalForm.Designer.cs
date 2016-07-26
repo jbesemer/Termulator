@@ -54,6 +54,7 @@
             this.OpenCloseButton = new System.Windows.Forms.Button();
             this.AboutPictureBox = new System.Windows.Forms.PictureBox();
             this.HelpPictureBox = new System.Windows.Forms.PictureBox();
+            this.saveScreenAsImageMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CommandContextMenu.SuspendLayout();
             this.TranscriptContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AboutPictureBox)).BeginInit();
@@ -87,15 +88,16 @@
             // 
             this.CommandContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.historyToolStripMenuItem,
-            this.favoritesToolStripMenuItem});
+            this.favoritesToolStripMenuItem,
+            this.saveScreenAsImageMenuItem});
             this.CommandContextMenu.Name = "contextMenuStrip2";
-            this.CommandContextMenu.Size = new System.Drawing.Size(131, 48);
+            this.CommandContextMenu.Size = new System.Drawing.Size(196, 92);
             this.CommandContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.CommandContextMenu_Opening);
             // 
             // historyToolStripMenuItem
             // 
             this.historyToolStripMenuItem.Name = "historyToolStripMenuItem";
-            this.historyToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.historyToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.historyToolStripMenuItem.Tag = "0";
             this.historyToolStripMenuItem.Text = "History...";
             this.historyToolStripMenuItem.DropDownOpening += new System.EventHandler(this.historyToolStripMenuItem_DropDownOpening);
@@ -103,7 +105,7 @@
             // favoritesToolStripMenuItem
             // 
             this.favoritesToolStripMenuItem.Name = "favoritesToolStripMenuItem";
-            this.favoritesToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.favoritesToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.favoritesToolStripMenuItem.Text = "Favorites...";
             this.favoritesToolStripMenuItem.DropDownOpening += new System.EventHandler(this.favoritesToolStripMenuItem_DropDownOpening);
             // 
@@ -285,6 +287,13 @@
             this.HelpPictureBox.TabStop = false;
             this.HelpPictureBox.Click += new System.EventHandler(this.HelpPictureBox_Click);
             // 
+            // saveScreenAsImageMenuItem
+            // 
+            this.saveScreenAsImageMenuItem.Name = "saveScreenAsImageMenuItem";
+            this.saveScreenAsImageMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.saveScreenAsImageMenuItem.Text = "Save Screen as Image...";
+            this.saveScreenAsImageMenuItem.Click += new System.EventHandler(this.saveScreenAsImageMenuItem_Click);
+            // 
             // TerminalForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -338,6 +347,7 @@
 		private System.Windows.Forms.Button OpenCloseButton;
 		private System.Windows.Forms.ToolStripMenuItem showTimingToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem SelectFontToolStripMenuItem;
-	}
+        private System.Windows.Forms.ToolStripMenuItem saveScreenAsImageMenuItem;
+    }
 }
 

@@ -982,5 +982,10 @@ namespace Termulator
         {
             CommandEntryTextBox.Focus();
         }
+
+        private void saveScreenAsImageMenuItem_Click( object sender, EventArgs e )
+        {
+
+        }
     }
 }
