@@ -29,11 +29,13 @@
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TerminalForm));
             this.SettingsButton = new System.Windows.Forms.Button();
             this.CommandEntryTextBox = new System.Windows.Forms.TextBox();
             this.CommandContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.historyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.favoritesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveScreenAsImageMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TranscriptTextBox = new System.Windows.Forms.TextBox();
             this.TranscriptContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.clearTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,7 +56,6 @@
             this.OpenCloseButton = new System.Windows.Forms.Button();
             this.AboutPictureBox = new System.Windows.Forms.PictureBox();
             this.HelpPictureBox = new System.Windows.Forms.PictureBox();
-            this.saveScreenAsImageMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CommandContextMenu.SuspendLayout();
             this.TranscriptContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AboutPictureBox)).BeginInit();
@@ -91,7 +92,7 @@
             this.favoritesToolStripMenuItem,
             this.saveScreenAsImageMenuItem});
             this.CommandContextMenu.Name = "contextMenuStrip2";
-            this.CommandContextMenu.Size = new System.Drawing.Size(196, 92);
+            this.CommandContextMenu.Size = new System.Drawing.Size(196, 70);
             this.CommandContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.CommandContextMenu_Opening);
             // 
             // historyToolStripMenuItem
@@ -108,6 +109,13 @@
             this.favoritesToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.favoritesToolStripMenuItem.Text = "Favorites...";
             this.favoritesToolStripMenuItem.DropDownOpening += new System.EventHandler(this.favoritesToolStripMenuItem_DropDownOpening);
+            // 
+            // saveScreenAsImageMenuItem
+            // 
+            this.saveScreenAsImageMenuItem.Name = "saveScreenAsImageMenuItem";
+            this.saveScreenAsImageMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.saveScreenAsImageMenuItem.Text = "Save Screen as Image...";
+            this.saveScreenAsImageMenuItem.Click += new System.EventHandler(this.saveScreenAsImageMenuItem_Click);
             // 
             // TranscriptTextBox
             // 
@@ -287,13 +295,6 @@
             this.HelpPictureBox.TabStop = false;
             this.HelpPictureBox.Click += new System.EventHandler(this.HelpPictureBox_Click);
             // 
-            // saveScreenAsImageMenuItem
-            // 
-            this.saveScreenAsImageMenuItem.Name = "saveScreenAsImageMenuItem";
-            this.saveScreenAsImageMenuItem.Size = new System.Drawing.Size(195, 22);
-            this.saveScreenAsImageMenuItem.Text = "Save Screen as Image...";
-            this.saveScreenAsImageMenuItem.Click += new System.EventHandler(this.saveScreenAsImageMenuItem_Click);
-            // 
             // TerminalForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -306,6 +307,7 @@
             this.Controls.Add(this.SettingsButton);
             this.Controls.Add(this.CommandEntryTextBox);
             this.Controls.Add(this.TranscriptTextBox);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(276, 167);
             this.Name = "TerminalForm";
             this.Text = "Termulator";
