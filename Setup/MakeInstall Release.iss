@@ -1,9 +1,10 @@
 ;#pragma option -v+
 
-#define AppVersion GetFileVersion('..\Termulator\bin\Release\Termulator.exe')
 #define SetupVersion "1.0.7.0"
 #define MyAppName "Termulator"
 #define MyAppExeName "Termulator.exe"
+#define MyGroupName "Termulator"
+#define AppVersion GetFileVersion('..\Termulator\bin\Release\Termulator.exe')
 
 ;; these next items are customized for Debug vs. Release builds
 ;;  MyBuildFolder is where the EXEs and DLLs, et al., come from
@@ -11,10 +12,8 @@
 ;;  MyOutputFilenameSuffix is so the debug build can have "Debug" in the setup filename
 
 ;;debug;; #define MyBuildFolder "..\Termulator\bin\Debug"
-;;debug;; #define MyGroupName "Termulator"
 ;;debug;; #define MyOutputFilenameSuffix "Debug_Setup"
 #define MyBuildFolder "..\Termulator\bin\Release"
-#define MyGroupName "Termulator"
 #define MyOutputFilenameSuffix "Release_Setup"
 
 ;; AppSrcBaseFolder is path for release notes and help file
@@ -369,11 +368,11 @@ end;
 [Run]
 ;Filename: "{app}\dotNetFx40_Client_x86_x64.exe"; Description: "{cm:LaunchProgram,Microsoft Runtime C Library Installer (required)}"; Flags: nowait postinstall skipifsilent
 ;Filename: "{app}\BLAM.exe"; Description: "{cm:LaunchProgram,BLAM}"; Flags: nowait postinstall skipifsilent
-Filename: {tmp}\dpinst\MultiLin\x86\dpinst.exe; Parameters: "/F /LM /SW /PATH {tmp}\CoherentDrivers\LabMax-Pro_SSIM_Driver"; WorkingDir: "{tmp}"; Flags: 32bit; Check: IsX86; StatusMsg: "Installing USB drivers ...";
-Filename: {tmp}\dpinst\MultiLin\amd64\dpinst.exe; Parameters: "/F /LM /SW /PATH {tmp}\CoherentDrivers\LabMax-Pro_SSIM_Driver"; WorkingDir: "{tmp}"; Flags: 64bit ; Check: IsX64;  StatusMsg: "Installing USB drivers ..."
+;Filename: {tmp}\dpinst\MultiLin\x86\dpinst.exe; Parameters: "/F /LM /SW /PATH {tmp}\CoherentDrivers\LabMax-Pro_SSIM_Driver"; WorkingDir: "{tmp}"; Flags: 32bit; Check: IsX86; StatusMsg: "Installing USB drivers ...";
+;Filename: {tmp}\dpinst\MultiLin\amd64\dpinst.exe; Parameters: "/F /LM /SW /PATH {tmp}\CoherentDrivers\LabMax-Pro_SSIM_Driver"; WorkingDir: "{tmp}"; Flags: 64bit ; Check: IsX64;  StatusMsg: "Installing USB drivers ..."
 
-Filename: {tmp}\dpinst\MultiLin\x86\dpinst.exe; Parameters: "/F /LM /SW /PATH {tmp}\CoherentDrivers\PowerMax-Pro_USB_Sensor_Driver"; WorkingDir: "{tmp}"; Flags: 32bit; Check: IsX86; StatusMsg: "Installing USB drivers ...";
-Filename: {tmp}\dpinst\MultiLin\amd64\dpinst.exe; Parameters: "/F /LM /SW /PATH {tmp}\CoherentDrivers\PowerMax-Pro_USB_Sensor_Driver"; WorkingDir: "{tmp}"; Flags: 64bit ; Check: IsX64;  StatusMsg: "Installing USB drivers ..."
+;Filename: {tmp}\dpinst\MultiLin\x86\dpinst.exe; Parameters: "/F /LM /SW /PATH {tmp}\CoherentDrivers\PowerMax-Pro_USB_Sensor_Driver"; WorkingDir: "{tmp}"; Flags: 32bit; Check: IsX86; StatusMsg: "Installing USB drivers ...";
+;Filename: {tmp}\dpinst\MultiLin\amd64\dpinst.exe; Parameters: "/F /LM /SW /PATH {tmp}\CoherentDrivers\PowerMax-Pro_USB_Sensor_Driver"; WorkingDir: "{tmp}"; Flags: 64bit ; Check: IsX64;  StatusMsg: "Installing USB drivers ..."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;Filename: {tmp}\dpinst\MultiLin\ia64\dpinst.exe; Parameters: "/F /LM /SW /PATH {win}\inf\CoherentDrivers\obis"; WorkingDir: {tmp}; Check: IsIA64 ; StatusMsg: "Installing USB drivers ...";
 ;Filename: {tmp}\dpinst\MultiLin\amd64\dpinst.exe; Parameters: "/F /LM /SW /PATH {win}\inf\CoherentDrivers\obis"; WorkingDir: {tmp}; Flags: 64bit ; Check: IsX64;  StatusMsg: "Installing USB drivers ..."
