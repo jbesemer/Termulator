@@ -173,7 +173,6 @@
     <Content Include="Images\cmatrix.ico" />
     <Content Include="Images\cmatrix.png" />
     <Content Include="Images\Icon1.ico" />
-    <Content Include="Images\Term.bmp" />
     <Content Include="Images\Terminator.ico" />
     <Content Include="Terminator.ico" />
   </ItemGroup>
