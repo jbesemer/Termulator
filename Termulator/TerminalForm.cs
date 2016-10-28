@@ -81,9 +81,9 @@ namespace Termulator
 			Text = "Termulator v" + Version;
 			historyToolStripMenuItem.Tag = 0;
 
-			SelectFontToolStripMenuItem.Visible = false;	// unimplemented
+			SelectFontToolStripMenuItem.Visible = false;    // unimplemented
 		}
-		
+
 		#endregion
 
 		#region // Load & Close Form //////////////////////////////////////////
@@ -397,6 +397,19 @@ namespace Termulator
 			InvokeSetRunning( false );
 		}
 
+		ASCIIEncoding Ascii = new ASCIIEncoding();
+
+		public string ReadData()
+		{
+			byte[] bytes = new byte[ 100 ];
+			int count = Port.Read( bytes, 0, bytes.Length );
+
+			for( int i = 0; i < count; i++ )
+				bytes[ i ] = (byte)( bytes[ i ] & 0x7f );
+
+			return Ascii.GetString( bytes, 0, count );
+		}
+
 		void ReaderThreadBody()
 		{
 			InvokeSetRunning( true );
@@ -410,7 +423,7 @@ namespace Termulator
                 {
                     string line;
 
-                    line = Port.ReadExisting();     // .ReadLine();
+					line = ReadData();	//  Port.ReadExisting(); // .ReadLine();
 
                     if( line == null )
                         break;

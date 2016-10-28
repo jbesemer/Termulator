@@ -87,7 +87,6 @@ namespace Termulator
 		public string EncodeSettings()
 		{
 			int[] fields 
-#if true
 				= new int[]{
 					PortSettings.GetInt( (string)BaudComboBox.SelectedItem ),
 					PortSettings.GetInt( (string)DataBitsComboBox.SelectedItem ),
@@ -100,17 +99,9 @@ namespace Termulator
 					PortSettings.Encode( ShowNonprintingCheckBox.Checked == true ),
 					PortSettings.Encode( ShowWhitespaceCheckBox.Checked == true ),
 					(int)EnterSends,
+					PortSettings.Encode( StripHighBitCheckBox.Checked == true ),
 				};
-#else
-				= new int[ 6 ];
 
-			fields[ 0 ] = PortSettings.GetInt( (string)BaudComboBox.SelectedItem );
-			fields[ 1 ] = PortSettings.GetInt( (string)DataBitsComboBox.SelectedItem );
-			fields[2] = PortSettings.DecodeTimeout( ReadTimeoutTextBox.Text );
-			fields[3] = (int)(Parity)ParityComboBox.SelectedItem;
-			fields[4] = (int)(StopBits)StopBitsComboBox.SelectedItem;
-			fields[ 5 ] = (int)(Handshake)HandshakingComboBox.SelectedItem;
-#endif
 			return PortSettings.Encode( fields );
 		}
 
@@ -148,6 +139,8 @@ namespace Termulator
 				EnterSends = EnterSends.CR;
 
 			DecodeEnterSends();
+
+			StripHighBitCheckBox.Checked = ( fields.Length >= 12 && fields[ 11 ] != 0 );
 		}
 
 		public void DecodeEnterSends()
@@ -159,7 +152,7 @@ namespace Termulator
 			else if( EnterSends == EnterSends.CRLF )
 				EnterSendsCRLF_Radio.Checked = true;
 		}
-		
+
 		#endregion
 	}
 }

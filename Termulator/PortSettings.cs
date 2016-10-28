@@ -11,9 +11,9 @@ namespace Termulator
 
 	public static class PortSettings
 	{
-		public static readonly String ObisDefaultPortSettings = "115200,8,-1,0,1,0,1,0";
+		public const string ObisDefaultPortSettings = "115200,8,-1,0,1,0,1,0,0";
 
-		public static readonly String ParameterSeparator = ",";
+		public const string ParameterSeparator = ",";
 		public static readonly char[] NameSeparator = { ':' };
 		public const int MinParameterCount = 6;
 
@@ -25,6 +25,7 @@ namespace Termulator
 		public static bool Edit_CR_To_CRLF { get; private set; }
 		public static bool ShowNonprinting { get; private set; }
 		public static bool ShowWhitespace { get; private set; }
+		public static bool StripHighBit { get; private set; }
 
 		#region // Port settings History //////////////////////////////////////
 
@@ -103,6 +104,7 @@ namespace Termulator
 					Encode( ShowNonprinting ),
 					Encode( ShowWhitespace ),
 					(int)EnterSends,
+					Encode( StripHighBit ),
 				};
 
 			return Encode( fields );
@@ -166,6 +168,9 @@ namespace Termulator
 
 				if( fields.Length >= 11 )
 					EnterSends = (EnterSends)fields[ 10 ];
+
+				if( fields.Length >= 12 )
+					StripHighBit = ( fields[ 10 ] != 0 );
 
 				SavePreviousSettings( port.PortName, settings );
 			}
