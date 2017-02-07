@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "Coherent" )]
 [assembly: AssemblyProduct( "Termulator" )]
-[assembly: AssemblyCopyright( "Copyright © Coherent 2012-2013" )]
+[assembly: AssemblyCopyright( "Copyright © Coherent 2012-2017" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
 
