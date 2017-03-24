@@ -71,9 +71,9 @@ namespace Termulator
 
 		public string GetPreviousSettings( string portName )
 		{
-			string value = ObisDefaultPortSettings;
-			Previous.TryGetValue( portName, out value );	// overwrite default with previous, if any
-			return value;
+			string value = null;
+			Previous.TryGetValue( portName, out value );    // overwrite default with previous, if any
+			return value ?? ObisDefaultPortSettings;
 		}
 
 		public void SavePreviousSettings( string portName, string setting )

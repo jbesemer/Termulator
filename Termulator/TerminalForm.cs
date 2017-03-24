@@ -32,7 +32,7 @@ namespace Termulator
 	{
 		#region // Constants, Properties //////////////////////////////////////
 
-		public AssemblyProperties AssemblyProperties;
+		public AssemblyProperties AssemblyProperties = new AssemblyProperties();
 
 		public string Version { get { return AssemblyProperties.AssemblyVersion.ToString(); } }
 
