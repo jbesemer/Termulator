@@ -55,6 +55,7 @@
     <ApplicationIcon>Images\cmatrix.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows" />
@@ -162,6 +163,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\SharedLibrary\SharedLibrary\SharedLibrary.csproj">
+      <Project>{03ab3314-c3c1-4f3b-b336-deddf6dece6f}</Project>
+      <Name>SharedLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Library\Library.csproj">
       <Project>{a740be5e-a662-488a-9993-1b0bce29e4fb}</Project>
       <Name>Library</Name>

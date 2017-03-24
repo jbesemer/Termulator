@@ -14,6 +14,7 @@ using System.IO.Ports;
 using System.Threading;
 
 using Library;
+using SharedLibrary;
 
 namespace Termulator
 {
@@ -31,10 +32,11 @@ namespace Termulator
 	{
 		#region // Constants, Properties //////////////////////////////////////
 
-		public const string Version = "1.8.0.1";
+		public AssemblyProperties AssemblyProperties;
+
+		public string Version { get { return AssemblyProperties.AssemblyVersion.ToString(); } }
 
 		public const string HELP_FILENAME = @"Termulator.pdf";
-
 		public const string InitialCommand = "*IDN?";
 
 		public const string LF = "\n";
@@ -48,15 +50,7 @@ namespace Termulator
 
 		SerialPort Port { get; set; }
 
-		public string PortName
-		{
-			get
-			{
-				return Port != null
-					? Port.PortName
-					: null;
-			}
-		}
+		public string PortName { get { return Port?.PortName; } }
 
 		public string SelectedPortName { get; protected set; }
 
@@ -103,9 +97,11 @@ namespace Termulator
 				Properties.Settings.Default.IsNewInstall = false;
 			}
 
+#if SURPRISE_DISCONNECT
 			DbtNotification = new Dbt.Notifier( this.Handle );
 			DbtNotification.Arrival += DbtNotification_Arrival;
 			DbtNotification.Removal += DbtNotification_Removal;
+#endif
 
 			string[] ports = SerialPort.GetPortNames();
 
@@ -211,7 +207,9 @@ namespace Termulator
 		{
 			if( Port != null )
 			{
+#if SURPRISE_DISCONNECT
 				CurrentPortProperties = null;
+#endif
 
 				try { Port.Close(); }
 				catch( Exception e )
@@ -277,15 +275,18 @@ namespace Termulator
 		// unused, part of Surprise Disconnect WIP
 		private void ReOpenPort()
 		{
+#if SURPRISE_DISCONNECT
 			if( CurrentPortProperties != null && CurrentPortDisconnected )
 			{
 				CurrentPortDisconnected = false;
 				OpenPort( CurrentPortProperties.PortName );
 			}
+#endif
 		}
 
 		#endregion
 
+#if SURPRISE_DISCONNECT
 		#region // Surprise Disconnect Handler ////////////////////////////////
 
 		protected ComPortInfo CurrentPortProperties;
@@ -318,6 +319,7 @@ namespace Termulator
 		}
 
 		#endregion
+#endif
 
 		#region // UI Events & Helpers ////////////////////////////////////////
 

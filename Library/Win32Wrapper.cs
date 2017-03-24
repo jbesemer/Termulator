@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
+using SharedLibrary;
+
 namespace Library
 {
 	public class Win32Wrapper
