@@ -8,10 +8,14 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO.Ports;
 
+using Library;
+
 namespace Termulator
 {
 	public partial class PortSettingsForm : Form
 	{
+		public PortSettings PortSettings { get; protected set; }
+
 		SerialPort Port;
 
 		static object[] BaudRates = new object[]{ 
@@ -26,13 +30,14 @@ namespace Termulator
 
 		public static EnterSends EnterSends { get; private set; }
 
-        public bool AutoReconnect;
+		public bool AutoReconnect;
 
-		public PortSettingsForm( SerialPort port )
+		public PortSettingsForm( SerialPort port, PortSettings PortSettings )
 		{
 			InitializeComponent();
 
 			Port = port;
+			this.PortSettings = PortSettings;
 
 			BaudComboBox.Items.AddRange( BaudRates );
 			DataBitsComboBox.Items.AddRange( DataBits );
@@ -45,9 +50,9 @@ namespace Termulator
 		{
 			this.CenterToParent();
 
-            AutoReconnectCheckBox.Checked = AutoReconnect;
+			AutoReconnectCheckBox.Checked = AutoReconnect;
 
-            if( Port != null )
+			if( Port != null )
 			{
 				LoadSettingsFromPort( Port );
 				Text = Port.PortName + " Settings";
@@ -62,9 +67,9 @@ namespace Termulator
 
 		private void OK_Button_Click( object sender, EventArgs e )
 		{
-            AutoReconnect = AutoReconnectCheckBox.Checked;
+			AutoReconnect = AutoReconnectCheckBox.Checked;
 
-            SaveSettingsToPort( Port );
+			SaveSettingsToPort( Port );
 		}
 
 		private void ObisModeButton_Click( object sender, EventArgs e )

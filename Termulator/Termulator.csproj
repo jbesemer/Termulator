@@ -52,7 +52,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Terminator.ico</ApplicationIcon>
+    <ApplicationIcon>Images\cmatrix.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -168,13 +168,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="cmatrix.ico" />
     <Content Include="Images\Arnold1.ico" />
     <Content Include="Images\cmatrix.ico" />
     <Content Include="Images\cmatrix.png" />
     <Content Include="Images\Icon1.ico" />
     <Content Include="Images\Terminator.ico" />
-    <Content Include="Terminator.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -5,6 +5,8 @@ using System.Text;
 
 namespace Library
 {
+    // Presently UNUSED
+
 	public class Nummer
 	{
 		public int Value;
