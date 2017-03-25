@@ -52,7 +52,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Images\cmatrix.ico</ApplicationIcon>
+    <ApplicationIcon>Computer.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
@@ -140,12 +140,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\info.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\help_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
@@ -173,12 +167,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Images\Arnold1.ico" />
-    <Content Include="Images\cmatrix.ico" />
-    <Content Include="Images\cmatrix.png" />
-    <Content Include="Images\Icon1.ico" />
-    <Content Include="Images\Terminator.ico" />
+    <Content Include="Computer.ico" />
+    <Content Include="Images\help_16x16.png" />
+    <Content Include="Images\info.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
