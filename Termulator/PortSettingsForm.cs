@@ -30,8 +30,6 @@ namespace Termulator
 
 		public static EnterSends EnterSends { get; private set; }
 
-		public bool AutoReconnect;
-
 		public PortSettingsForm( SerialPort port, PortSettings PortSettings )
 		{
 			InitializeComponent();
@@ -50,8 +48,6 @@ namespace Termulator
 		{
 			this.CenterToParent();
 
-			AutoReconnectCheckBox.Checked = AutoReconnect;
-
 			if( Port != null )
 			{
 				LoadSettingsFromPort( Port );
@@ -67,8 +63,6 @@ namespace Termulator
 
 		private void OK_Button_Click( object sender, EventArgs e )
 		{
-			AutoReconnect = AutoReconnectCheckBox.Checked;
-
 			SaveSettingsToPort( Port );
 		}
 
@@ -105,6 +99,8 @@ namespace Termulator
 					PortSettings.Encode( ShowNonprintingCheckBox.Checked == true ),
 					PortSettings.Encode( ShowWhitespaceCheckBox.Checked == true ),
 					(int)EnterSends,
+					PortSettings.Encode( Strip8thBitCheckBox.Checked == true ),
+					PortSettings.Encode( Show8thBitCheckBox.Checked == true ),
 				};
 #else
 				= new int[ 6 ];
@@ -152,6 +148,9 @@ namespace Termulator
 			else
 				EnterSends = EnterSends.CR;
 
+			Strip8thBitCheckBox.Checked = ( ( fields.Length >= 12 ) && fields[ 11 ] != 0 );
+			Show8thBitCheckBox.Checked = ( ( fields.Length >= 13 ) && fields[ 12 ] != 0 );
+
 			DecodeEnterSends();
 		}
 
@@ -164,7 +163,17 @@ namespace Termulator
 			else if( EnterSends == EnterSends.CRLF )
 				EnterSendsCRLF_Radio.Checked = true;
 		}
-		
+
 		#endregion
+
+		private void Strip8thBitCheckBox_CheckedChanged( object sender, EventArgs e )
+		{
+
+		}
+
+		private void Show8thBitCheckBox_CheckedChanged( object sender, EventArgs e )
+		{
+
+		}
 	}
 }

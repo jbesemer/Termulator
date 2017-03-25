@@ -46,6 +46,8 @@
 			this.button2 = new System.Windows.Forms.Button();
 			this.ObisModeButton = new System.Windows.Forms.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.Show8thBitCheckBox = new System.Windows.Forms.CheckBox();
+			this.Strip8thBitCheckBox = new System.Windows.Forms.CheckBox();
 			this.ShowWhitespaceCheckBox = new System.Windows.Forms.CheckBox();
 			this.ShowNonprintingCheckBox = new System.Windows.Forms.CheckBox();
 			this.CR_CheckBox = new System.Windows.Forms.CheckBox();
@@ -55,12 +57,9 @@
 			this.EnterSendsCR_Radio = new System.Windows.Forms.RadioButton();
 			this.EnterSendsLF_Radio = new System.Windows.Forms.RadioButton();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
-			this.groupBox3 = new System.Windows.Forms.GroupBox();
-			this.AutoReconnectCheckBox = new System.Windows.Forms.CheckBox();
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
-			this.groupBox3.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// BaudComboBox
@@ -168,7 +167,7 @@
 			// 
 			this.OK_Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.OK_Button.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.OK_Button.Location = new System.Drawing.Point(217, 303);
+			this.OK_Button.Location = new System.Drawing.Point(217, 265);
 			this.OK_Button.Name = "OK_Button";
 			this.OK_Button.Size = new System.Drawing.Size(79, 23);
 			this.OK_Button.TabIndex = 16;
@@ -180,7 +179,7 @@
 			// 
 			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button2.Location = new System.Drawing.Point(116, 303);
+			this.button2.Location = new System.Drawing.Point(116, 265);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(79, 23);
 			this.button2.TabIndex = 17;
@@ -190,7 +189,7 @@
 			// ObisModeButton
 			// 
 			this.ObisModeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.ObisModeButton.Location = new System.Drawing.Point(15, 302);
+			this.ObisModeButton.Location = new System.Drawing.Point(15, 264);
 			this.ObisModeButton.Name = "ObisModeButton";
 			this.ObisModeButton.Size = new System.Drawing.Size(79, 23);
 			this.ObisModeButton.TabIndex = 18;
@@ -200,16 +199,41 @@
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.Show8thBitCheckBox);
+			this.groupBox1.Controls.Add(this.Strip8thBitCheckBox);
 			this.groupBox1.Controls.Add(this.ShowWhitespaceCheckBox);
 			this.groupBox1.Controls.Add(this.ShowNonprintingCheckBox);
 			this.groupBox1.Controls.Add(this.CR_CheckBox);
 			this.groupBox1.Controls.Add(this.NL_CheckBox);
 			this.groupBox1.Location = new System.Drawing.Point(15, 125);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(302, 56);
+			this.groupBox1.Size = new System.Drawing.Size(302, 76);
 			this.groupBox1.TabIndex = 19;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Input Translations";
+			// 
+			// Show8thBitCheckBox
+			// 
+			this.Show8thBitCheckBox.AutoSize = true;
+			this.Show8thBitCheckBox.Enabled = false;
+			this.Show8thBitCheckBox.Location = new System.Drawing.Point(147, 52);
+			this.Show8thBitCheckBox.Name = "Show8thBitCheckBox";
+			this.Show8thBitCheckBox.Size = new System.Drawing.Size(86, 17);
+			this.Show8thBitCheckBox.TabIndex = 5;
+			this.Show8thBitCheckBox.Text = "Show 8th Bit";
+			this.Show8thBitCheckBox.UseVisualStyleBackColor = true;
+			this.Show8thBitCheckBox.CheckedChanged += new System.EventHandler(this.Show8thBitCheckBox_CheckedChanged);
+			// 
+			// Strip8thBitCheckBox
+			// 
+			this.Strip8thBitCheckBox.AutoSize = true;
+			this.Strip8thBitCheckBox.Location = new System.Drawing.Point(21, 52);
+			this.Strip8thBitCheckBox.Name = "Strip8thBitCheckBox";
+			this.Strip8thBitCheckBox.Size = new System.Drawing.Size(80, 17);
+			this.Strip8thBitCheckBox.TabIndex = 4;
+			this.Strip8thBitCheckBox.Text = "Strip 8th Bit";
+			this.Strip8thBitCheckBox.UseVisualStyleBackColor = true;
+			this.Strip8thBitCheckBox.CheckedChanged += new System.EventHandler(this.Strip8thBitCheckBox_CheckedChanged);
 			// 
 			// ShowWhitespaceCheckBox
 			// 
@@ -258,7 +282,7 @@
 			this.groupBox2.Controls.Add(this.EnterSendsCRLF_Radio);
 			this.groupBox2.Controls.Add(this.EnterSendsCR_Radio);
 			this.groupBox2.Controls.Add(this.EnterSendsLF_Radio);
-			this.groupBox2.Location = new System.Drawing.Point(15, 182);
+			this.groupBox2.Location = new System.Drawing.Point(15, 213);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(302, 39);
 			this.groupBox2.TabIndex = 20;
@@ -307,26 +331,6 @@
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "RS-232 Settings";
 			// 
-			// groupBox3
-			// 
-			this.groupBox3.Controls.Add(this.AutoReconnectCheckBox);
-			this.groupBox3.Location = new System.Drawing.Point(15, 228);
-			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(302, 44);
-			this.groupBox3.TabIndex = 23;
-			this.groupBox3.TabStop = false;
-			this.groupBox3.Text = "Reader";
-			// 
-			// AutoReconnectCheckBox
-			// 
-			this.AutoReconnectCheckBox.AutoSize = true;
-			this.AutoReconnectCheckBox.Location = new System.Drawing.Point(21, 19);
-			this.AutoReconnectCheckBox.Name = "AutoReconnectCheckBox";
-			this.AutoReconnectCheckBox.Size = new System.Drawing.Size(154, 17);
-			this.AutoReconnectCheckBox.TabIndex = 0;
-			this.AutoReconnectCheckBox.Text = "Reconnect if disconnected";
-			this.AutoReconnectCheckBox.UseVisualStyleBackColor = true;
-			// 
 			// contextMenuStrip1
 			// 
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
@@ -336,8 +340,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(338, 336);
-			this.Controls.Add(this.groupBox3);
+			this.ClientSize = new System.Drawing.Size(338, 298);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.ObisModeButton);
@@ -364,8 +367,6 @@
 			this.groupBox1.PerformLayout();
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
-			this.groupBox3.ResumeLayout(false);
-			this.groupBox3.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -398,8 +399,8 @@
 		private System.Windows.Forms.RadioButton EnterSendsLF_Radio;
 		private System.Windows.Forms.CheckBox ShowWhitespaceCheckBox;
 		private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.CheckBox AutoReconnectCheckBox;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-    }
+		private System.Windows.Forms.CheckBox Show8thBitCheckBox;
+		private System.Windows.Forms.CheckBox Strip8thBitCheckBox;
+	}
 }

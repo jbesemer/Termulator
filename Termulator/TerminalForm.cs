@@ -344,12 +344,10 @@ namespace Termulator
 			// ClosePort();
 
 			var dlg = new PortSettingsForm( Port, PortSettings );
-			dlg.AutoReconnect = AutoReconnect;
 			var result = dlg.ShowDialog( this );
 
 			if( result == System.Windows.Forms.DialogResult.OK )
 			{
-				AutoReconnect = dlg.AutoReconnect;
 				switch( PortSettings.EnterSends )
 				{
 				case EnterSends.CR:
@@ -413,24 +411,22 @@ namespace Termulator
 
 			Invoke( new Action( SendInitialCommand ) );
 
+			const int BufferSize = 1200;
+			byte[] bytes = new byte[ BufferSize ];
+
 			while( ReaderRunning && Port != null )
 			{
 				try
 				{
-					string line;
-
-					line = Port.ReadExisting();     // .ReadLine();
-
-					if( line == null )
-						break;
-
-					if( line == "" )
+					int count = Port.Read( bytes, 0, BufferSize );
+					if( count > 0 )
 					{
-						Thread.Sleep( 200 );
-						continue;
+						AppendBytes( bytes, count );
 					}
-
-					InvokeAppendText( line );
+				}
+				catch( TimeoutException )
+				{
+					continue;    // ignore timeout
 				}
 				catch( ThreadAbortException )
 				{
@@ -471,6 +467,44 @@ namespace Termulator
 			Invoke( new Action( ReaderThreadStopped ) );
 		}
 
+		public void AppendBytes( byte[] bytes, int count )
+		{
+			if( PortSettings.Strip8thBit )
+			{
+				for( int i = 0; i < count; i++ )
+				{
+					bytes[ i ] &= 0x7f;
+				}
+			}
+
+			string s = Encoding.ASCII.GetString( bytes, 0, count );
+			s = TranslateText( s );
+			InvokeAppendText( s );
+		}
+
+		void InvokeAppendText( string text )
+		{
+			Invoke( new Action<string>( AppendText ), new object[] { text } );
+		}
+
+		public string TranslateText( string text )
+		{
+			if( PortSettings.Edit_NL_To_CRLF )
+			{
+				text = text.Replace( LF, CRLF );
+			}
+			if( PortSettings.Edit_CR_To_CRLF )
+			{
+				text = text.Replace( CR, CRLF );
+			}
+			if( PortSettings.ShowNonprinting )
+			{
+				text = CharMap.Convert( text );
+			}
+
+			return text;
+		}
+
 		void ReaderThreadStopped()
 		{
 			Debug.WriteLine( "ReaderThread Stopped" );
@@ -481,11 +515,6 @@ namespace Termulator
 		#endregion
 
 		#region // Append text ////////////////////////////////////////////////
-
-		void InvokeAppendText( string text )
-		{
-			Invoke( new Action<string>( AppendText ), new object[] { text } );
-		}
 
 		// append received text, subject to translations
 
@@ -553,24 +582,6 @@ namespace Termulator
 					dt.Minute,
 					dt.Second,
 					dt.Millisecond );
-		}
-
-		public string TranslateText( string text )
-		{
-			if( PortSettings.Edit_NL_To_CRLF )
-			{
-				text = text.Replace( LF, CRLF );
-			}
-			if( PortSettings.Edit_CR_To_CRLF )
-			{
-				text = text.Replace( CR, CRLF );
-			}
-			if( PortSettings.ShowNonprinting )
-			{
-				text = CharMap.Convert( text );
-			}
-
-			return text;
 		}
 
 		void ScrollToEnd()

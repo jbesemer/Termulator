@@ -11,8 +11,8 @@ namespace Termulator
 
 	public class PortSettings
 	{
-		public const String ObisDefaultPortSettings = "115200,8,-1,0,1,0,1,0";
-		public const String MeterlessPowerDefaultPortSettings = "9600,8,-1,0,1,0,1,0";
+		public const String ObisDefaultPortSettings = "115200,8,-1,0,1,0,1,0,0,0";
+		public const String MeterlessPowerDefaultPortSettings = "9600,8,-1,0,1,0,1,0,0,0";
 
 		public const String ParameterSeparator = ",";
 		public readonly char[] NameSeparator = { ':' };
@@ -26,6 +26,8 @@ namespace Termulator
 		public bool Edit_CR_To_CRLF { get; private set; }
 		public bool ShowNonprinting { get; private set; }
 		public bool ShowWhitespace { get; private set; }
+		public bool Strip8thBit { get; private set; }
+		public bool Show8thBit { get; private set; }
 
 		#region // Port settings History //////////////////////////////////////
 
@@ -106,6 +108,8 @@ namespace Termulator
 					Encode( ShowNonprinting ),
 					Encode( ShowWhitespace ),
 					(int)EnterSends,
+					Encode( Strip8thBit ),
+					Encode( Show8thBit ),
 				};
 
 			return Encode( fields );
@@ -169,6 +173,12 @@ namespace Termulator
 
 				if( fields.Length >= 11 )
 					EnterSends = (EnterSends)fields[ 10 ];
+
+				if( fields.Length >= 12 )
+					Strip8thBit = ( fields[ 11 ] != 0 );
+
+				if( fields.Length >= 12 )
+					Show8thBit = ( fields[ 12 ] != 0 );
 
 				SavePreviousSettings( port.PortName, settings );
 			}
