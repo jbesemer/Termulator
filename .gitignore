@@ -11,7 +11,7 @@
 *.userprefs
 
 # generated setup exes
-*._Setup.exe
+*_Setup.exe
 
 # Build results
 [Dd]ebug/
