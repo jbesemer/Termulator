@@ -10,6 +10,9 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+# generated setup exes
+*._Setup.exe
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
