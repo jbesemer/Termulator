@@ -153,45 +153,47 @@
             this.saveToDiskToolStripMenuItem,
             this.UnicodeUnitTestToolStripMenuItem});
 			this.TranscriptContextMenu.Name = "contextMenuStrip1";
-			this.TranscriptContextMenu.Size = new System.Drawing.Size(227, 264);
+			this.TranscriptContextMenu.Size = new System.Drawing.Size(265, 286);
 			// 
 			// clearTextToolStripMenuItem
 			// 
 			this.clearTextToolStripMenuItem.Name = "clearTextToolStripMenuItem";
-			this.clearTextToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+			this.clearTextToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
 			this.clearTextToolStripMenuItem.Text = "Clear All";
 			this.clearTextToolStripMenuItem.Click += new System.EventHandler(this.clearTextToolStripMenuItem_Click);
 			// 
 			// selectAllToolStripMenuItem
 			// 
 			this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
-			this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+			this.selectAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
+			this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
 			this.selectAllToolStripMenuItem.Text = "Select All";
 			this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(223, 6);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(261, 6);
 			// 
 			// copyToolStripMenuItem
 			// 
 			this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-			this.copyToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+			this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+			this.copyToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
 			this.copyToolStripMenuItem.Text = "Copy Selection to Clipboard";
 			this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
 			// 
 			// copyToClipboardToolStripMenuItem
 			// 
 			this.copyToClipboardToolStripMenuItem.Name = "copyToClipboardToolStripMenuItem";
-			this.copyToClipboardToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+			this.copyToClipboardToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
 			this.copyToClipboardToolStripMenuItem.Text = "Copy All to Clipboard";
 			this.copyToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyToClipboardToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(223, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(261, 6);
 			// 
 			// autoScrollToEndToolStripMenuItem
 			// 
@@ -199,21 +201,21 @@
 			this.autoScrollToEndToolStripMenuItem.CheckOnClick = true;
 			this.autoScrollToEndToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.autoScrollToEndToolStripMenuItem.Name = "autoScrollToEndToolStripMenuItem";
-			this.autoScrollToEndToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+			this.autoScrollToEndToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
 			this.autoScrollToEndToolStripMenuItem.Text = "Auto Scroll to End";
 			// 
 			// showTimingToolStripMenuItem
 			// 
 			this.showTimingToolStripMenuItem.CheckOnClick = true;
 			this.showTimingToolStripMenuItem.Name = "showTimingToolStripMenuItem";
-			this.showTimingToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+			this.showTimingToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
 			this.showTimingToolStripMenuItem.Text = "Show Command Timing";
 			this.showTimingToolStripMenuItem.Click += new System.EventHandler(this.showTimingToolStripMenuItem_Click);
 			// 
 			// SelectFontToolStripMenuItem
 			// 
 			this.SelectFontToolStripMenuItem.Name = "SelectFontToolStripMenuItem";
-			this.SelectFontToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+			this.SelectFontToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
 			this.SelectFontToolStripMenuItem.Text = "Select Font";
 			this.SelectFontToolStripMenuItem.Click += new System.EventHandler(this.SelectFontToolStripMenuItem_Click);
 			// 
@@ -221,32 +223,32 @@
 			// 
 			this.DecodeBinaryToolStripMenuItem.CheckOnClick = true;
 			this.DecodeBinaryToolStripMenuItem.Name = "DecodeBinaryToolStripMenuItem";
-			this.DecodeBinaryToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+			this.DecodeBinaryToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
 			this.DecodeBinaryToolStripMenuItem.Text = "Decode Binary";
 			// 
 			// toolStripSeparator3
 			// 
 			this.toolStripSeparator3.Name = "toolStripSeparator3";
-			this.toolStripSeparator3.Size = new System.Drawing.Size(223, 6);
+			this.toolStripSeparator3.Size = new System.Drawing.Size(261, 6);
 			// 
 			// loadFileToolStripMenuItem
 			// 
 			this.loadFileToolStripMenuItem.Name = "loadFileToolStripMenuItem";
-			this.loadFileToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+			this.loadFileToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
 			this.loadFileToolStripMenuItem.Text = "Load Commands From File...";
 			this.loadFileToolStripMenuItem.Click += new System.EventHandler(this.DownloadFileToolStripMenuItem_Click);
 			// 
 			// saveToDiskToolStripMenuItem
 			// 
 			this.saveToDiskToolStripMenuItem.Name = "saveToDiskToolStripMenuItem";
-			this.saveToDiskToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+			this.saveToDiskToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
 			this.saveToDiskToolStripMenuItem.Text = "Save All To File...";
 			this.saveToDiskToolStripMenuItem.Click += new System.EventHandler(this.saveToDiskToolStripMenuItem_Click);
 			// 
 			// UnicodeUnitTestToolStripMenuItem
 			// 
 			this.UnicodeUnitTestToolStripMenuItem.Name = "UnicodeUnitTestToolStripMenuItem";
-			this.UnicodeUnitTestToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+			this.UnicodeUnitTestToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
 			this.UnicodeUnitTestToolStripMenuItem.Text = "Unicode Unit Test";
 			this.UnicodeUnitTestToolStripMenuItem.Click += new System.EventHandler(this.UnicodeUnitTestToolStripMenuItem_Click);
 			// 
