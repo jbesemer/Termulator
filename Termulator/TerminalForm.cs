@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.IO.Ports;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 using Library;
 using SharedLibrary;
@@ -914,9 +915,15 @@ namespace Termulator
 
 				using( TextWriter writer = File.CreateText( name ) )
 				{
-					writer.Write( TranscriptTextBox.Text );
+					string text = Vis( TranscriptTextBox.Text );
+					writer.Write( text );
 				}
 			}
+		}
+
+		private string Vis(string text )
+		{
+			return text.Replace( "\r", "\\r" );
 		}
 
 		private void DownloadFileToolStripMenuItem_Click( object sender, EventArgs e )

@@ -249,7 +249,6 @@
 			// ShowNonprintingCheckBox
 			// 
 			this.ShowNonprintingCheckBox.AutoSize = true;
-			this.ShowNonprintingCheckBox.Enabled = false;
 			this.ShowNonprintingCheckBox.Location = new System.Drawing.Point(147, 16);
 			this.ShowNonprintingCheckBox.Name = "ShowNonprintingCheckBox";
 			this.ShowNonprintingCheckBox.Size = new System.Drawing.Size(110, 17);
