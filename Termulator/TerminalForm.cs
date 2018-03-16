@@ -419,6 +419,7 @@ namespace Termulator
 			{
 				try
 				{
+					// TODO: .ReadExisting() & convert to bytes?
 					int count = Port.Read( bytes, 0, BufferSize );
 					if( count > 0 )
 					{
@@ -487,6 +488,19 @@ namespace Termulator
 		{
 			Invoke( new Action<string>( AppendText ), new object[] { text } );
 		}
+
+		// HERe'S THE NEW RULE [supposedly according to the HTML5 spec] 
+		// textareas [which are not exactly same as textbox] should return 
+		// CRLF for each newline.
+		//
+		// Patterns for newline on input streams:
+		// 1. every two-character string consisting of a "CRLF"character pair.
+		// 2. every occurrence of a "CR" not followed by a "LF". 
+		// 3. every occurrence of a "LF" (U+000A) character not preceded by a "CR"
+		//
+		// "CR" = (U+000D) 
+		// "LF" = (U+000A) 
+		// per https://stackoverflow.com/questions/14217101/what-character-represents-a-new-line-in-a-text-area
 
 		public string TranslateText( string text )
 		{
