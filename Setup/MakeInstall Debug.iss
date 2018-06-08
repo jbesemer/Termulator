@@ -22,7 +22,7 @@
 
 #define MyAppPublisher "Coherent, Inc."
 #define MyAppURL "http://www.coherent.com/"
-#define MyAppCopyright "Copyright (C) 2013-2016 Coherent, Inc."
+#define MyAppCopyright "Copyright (C) 2013-2017 Coherent, Inc."
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -57,7 +57,7 @@ UsePreviousAppDir=no
 UsePreviousGroup=no
 
 ;;;; Tools/Configure Sign Tool must define "byparam=$p"
-SignTool=byparam $q{#SourcePath}\Misc\SignTool.exe$q sign /f $q{#SourcePath}\Misc\mycert.pfx$q /p C0herent.0 /t http://timestamp.verisign.com/scripts/timstamp.dll $f
+SignTool=byparam $q{#SourcePath}\Misc\SignTool.exe$q sign /f $q{#SourcePath}\Misc\mycert.pfx$q /p c0herent.0 /t http://timestamp.verisign.com/scripts/timstamp.dll $f
 ;;;;;;;;;;;SignTool=byparam $q{#SourcePath}\Misc\SignTool.exe$q sign /f $q{#SourcePath}\Misc\mycert.pfx$q /p C0herent.0 /t http://timestamp.verisign.com/scripts/timstamp.dll $f
 
 [Icons]
@@ -73,6 +73,7 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 Source: "{#MyBuildFolder}\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyBuildFolder}\{#MyAppExeName}.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyBuildFolder}\Library.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\SharedLibrary\SharedLibrary\bin\Debug\SharedLibrary.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Doc\Termulator.pdf"; DestDir: "{app}"; Flags: ignoreversion isreadme
 
 Source: "RequiredSoftware\NDP451-KB2858728-x86-x64-AllOS-ENU.exe"; DestDir: "{tmp}"; Flags: ignoreversion

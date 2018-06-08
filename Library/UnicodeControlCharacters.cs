@@ -49,7 +49,14 @@ namespace Library
 			string r = "";
 
 			foreach( char c in s )
+			{
 				r += Convert( c );
+				if( c == '\n' )
+				{
+					r += '\r';
+					r += '\n';
+				}
+			}
 
 			return r;
 		}

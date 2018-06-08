@@ -1,0 +1,19 @@
+/// COM4 Opened ///\r
+Send: *IDN?\r
+Starting Pulse 2724, 0, 100, 900\r\r\r
+Starting Pulse 2724, 0, 400, 400\r\r\r
+Starting Sine 1361.00, 1361.00, 200, 10.00  # uS (500.00 Hz)\r\r\r
+Starting Pulse 2724, 0, 100, 900\r\r\r
+Starting Pulse 2724, 0, 400, 400\r\r\r
+Starting Sine 1361.00, 1361.00, 200, 10.00  # uS (500.00 Hz)\r\r\r
+Starting Pulse 2724, 0, 100, 900\r\r\r
+Starting Pulse 2724, 0, 400, 400\r\r\r
+Starting Sine 1361.00, 1361.00, 200, 10.00  # uS (500.00 Hz)\r\r\r
+Starting Pulse 2724, 0, 100, 900\r\r\r
+JB, Inc - SigGen 26-Jul-2016 12:00  - v2.0.6 - 26-Jul-2016 12:00\r\r\r
+Starting Pulse 2724, 0, 400, 400\r\r\r
+Starting Sine 1361.00, 1361.00, 200, 10.00  # uS (500.00 Hz)\r\r\r
+Starting Pulse 2724, 0, 100, 900\r\r\r
+Starting Pulse 2724, 0, 400, 400\r\r\r
+Starting Sine 1361.00, 1361.00, 200, 10.00  # uS (500.00 Hz)\r\r\r
+Starting Pulse 2724, 0, 100, 900\r\r\r

@@ -1,4 +1,4 @@
-﻿// #define TEST_NO_DEFAULT_PORT
+﻿#define RESTORE_PREVIOUS_SELECTED_PORT
 
 using System;
 using System.Collections.Generic;
@@ -12,29 +12,32 @@ using System.Windows.Forms;
 using System.IO;
 using System.IO.Ports;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 using Library;
+using SharedLibrary;
 
 namespace Termulator
 {
-    // TODO: 
-    //      synchronize sending commands from file
+	// TODO: 
+	//      synchronize sending commands from file
 	//      remember load folder, filename
 	//      remember save folder
-    //      convert to WPF
-    //      separate ReaderThread class
-    //      Friendly names
-    //      Surprise Disconnect ?
-    //      redirect all keyboard to command box
+	//      convert to WPF
+	//      separate ReaderThread class
+	//      Friendly names
+	//      Surprise Disconnect ?
+	//      redirect all keyboard to command box
 
 	public partial class TerminalForm : Form
 	{
 		#region // Constants, Properties //////////////////////////////////////
 
-		public const string Version = "1.7.1";
+		public AssemblyProperties AssemblyProperties = new AssemblyProperties();
+
+		public string Version { get { return AssemblyProperties.AssemblyVersion.ToString(); } }
 
 		public const string HELP_FILENAME = @"Termulator.pdf";
-
 		public const string InitialCommand = "*IDN?";
 
 		public const string LF = "\n";
@@ -44,27 +47,21 @@ namespace Termulator
 
 		public static string EnterSequence = CR;
 
+		public PortSettings PortSettings { get; protected set; }
+
 		SerialPort Port { get; set; }
 
-		public string PortName
-		{
-			get
-			{
-				return Port != null
-					? Port.PortName
-					: null;
-			}
-		}
+		public string PortName { get { return Port?.PortName; } }
 
-        public string SelectedPortName { get; protected set; }
+		public string SelectedPortName { get; protected set; }
 
-        public bool IsOpen { get { return Port != null && Port.IsOpen; } }
+		public bool IsOpen { get { return Port != null && Port.IsOpen; } }
 
 		public Stopwatch Stopwatch = new Stopwatch();
 
 		UnicodeControlCharacters CharMap = new UnicodeControlCharacters( 0 );
 
-        public bool AutoReconnect { get; protected set; }
+		public bool AutoReconnect { get; protected set; }
 
 		public uint DownloadDelay;
 		public string DownloadFilename;
@@ -80,6 +77,7 @@ namespace Termulator
 
 			Text = "Termulator v" + Version;
 			historyToolStripMenuItem.Tag = 0;
+			PortSettings = new PortSettings();
 
 			SelectFontToolStripMenuItem.Visible = false;	// unimplemented
 		}
@@ -91,17 +89,20 @@ namespace Termulator
 		private void TerminalForm_Load( object sender, EventArgs e )
 		{
 			this.LoadLocationAndSize( Properties.Settings.Default.MainFormLocAndSize );
-            AutoReconnect = Properties.Settings.Default.AutoReconnect;
+			AutoReconnect = Properties.Settings.Default.AutoReconnect;
+			PortSettings.LoadAllPrevious( Properties.Settings.Default.ComPortSettings );
 
-            if( Properties.Settings.Default.IsNewInstall )
+			if( Properties.Settings.Default.IsNewInstall )
 			{
 				Properties.Settings.Default.Upgrade();
 				Properties.Settings.Default.IsNewInstall = false;
 			}
 
+#if SURPRISE_DISCONNECT
 			DbtNotification = new Dbt.Notifier( this.Handle );
 			DbtNotification.Arrival += DbtNotification_Arrival;
 			DbtNotification.Removal += DbtNotification_Removal;
+#endif
 
 			string[] ports = SerialPort.GetPortNames();
 
@@ -110,8 +111,8 @@ namespace Termulator
 
 			PortNameCombo.Items.AddRange( ports );
 
-#if !TEST_NO_DEFAULT_PORT
-            SelectedPortName = Properties.Settings.Default.SelectedPort;
+#if RESTORE_PREVIOUS_SELECTED_PORT
+			SelectedPortName = Properties.Settings.Default.SelectedPort;
 			if( !string.IsNullOrEmpty( SelectedPortName ) )
 			{
 				int index = PortNameCombo.FindStringExact( SelectedPortName );
@@ -147,6 +148,9 @@ namespace Termulator
 			if( location != null )
 				Properties.Settings.Default.MainFormLocAndSize = location;
 
+			Properties.Settings.Default.ComPortSettings 
+				= PortSettings.SaveAllPrevious();
+
 			if( PortNameCombo.SelectedIndex >= 0 )
 			{
 				Properties.Settings.Default.SelectedPort = (string)PortNameCombo.SelectedItem;
@@ -165,9 +169,9 @@ namespace Termulator
 			Properties.Settings.Default.DownloadFilename = DownloadFilename;
 			Properties.Settings.Default.DownloadTraceDataSent = DownloadTraceDataSent;
 
-            Properties.Settings.Default.AutoReconnect = AutoReconnect;
+			Properties.Settings.Default.AutoReconnect = AutoReconnect;
 
-            Properties.Settings.Default.Save();
+			Properties.Settings.Default.Save();
 		}
 
 		#endregion
@@ -178,7 +182,7 @@ namespace Termulator
 		{
 			OpenPort( SelectedPortName );
 		}
-        
+		
 		private void OpenPort( string portName )
 		{
 			ClosePort();
@@ -186,7 +190,7 @@ namespace Termulator
 			try
 			{
 				Port = new SerialPort( portName );
-				PortSettings.SetObisDefaults( Port );
+				PortSettings.RestorePreviousSettings( Port );
 				Port.Open();
 			}
 			catch( Exception e )
@@ -204,7 +208,9 @@ namespace Termulator
 		{
 			if( Port != null )
 			{
+#if SURPRISE_DISCONNECT
 				CurrentPortProperties = null;
+#endif
 
 				try { Port.Close(); }
 				catch( Exception e )
@@ -219,21 +225,21 @@ namespace Termulator
 			Port = null;
 		}
 
-        private void TryOpenPort()
-        {
-            try
-            {
-                Port = new SerialPort( SelectedPortName );
-                PortSettings.SetObisDefaults( Port );
-                Port.Open();
-            }
-            catch( Exception e )
-            {
-                Debug.WriteLine( "TryOpenPort[ " + SelectedPortName + " ] exception: " + e.Message );
-            }
-        }
+		private void TryOpenPort()
+		{
+			try
+			{
+				Port = new SerialPort( SelectedPortName );
+				PortSettings.SetObisDefaults( Port );
+				Port.Open();
+			}
+			catch( Exception e )
+			{
+				Debug.WriteLine( "TryOpenPort[ " + SelectedPortName + " ] exception: " + e.Message );
+			}
+		}
 
-        private void UpdatePortOpenStatus()
+		private void UpdatePortOpenStatus()
 		{
 			UpdatePortOpenStatus( IsOpen );
 		}
@@ -267,21 +273,24 @@ namespace Termulator
 			}
 		}
 
-        // unused, part of Surprise Disconnect WIP
-        private void ReOpenPort()
-        {
-            if( CurrentPortProperties != null && CurrentPortDisconnected )
-            {
-                CurrentPortDisconnected = false;
-                OpenPort( CurrentPortProperties.PortName );
-            }
-        }
+		// unused, part of Surprise Disconnect WIP
+		private void ReOpenPort()
+		{
+#if SURPRISE_DISCONNECT
+			if( CurrentPortProperties != null && CurrentPortDisconnected )
+			{
+				CurrentPortDisconnected = false;
+				OpenPort( CurrentPortProperties.PortName );
+			}
+#endif
+		}
 
-        #endregion
+		#endregion
 
-        #region // Surprise Disconnect Handler ////////////////////////////////
+#if SURPRISE_DISCONNECT
+		#region // Surprise Disconnect Handler ////////////////////////////////
 
-        protected ComPortInfo CurrentPortProperties;
+		protected ComPortInfo CurrentPortProperties;
 		protected USB_DeviceDetector USB_DeviceDetector;
 		protected bool CurrentPortDisconnected;
 		public Dbt.Notifier DbtNotification { get; protected set; }
@@ -311,37 +320,36 @@ namespace Termulator
 		}
 
 		#endregion
+#endif
 
 		#region // UI Events & Helpers ////////////////////////////////////////
 
 		private void PortNameCombo_SelectedIndexChanged( object sender, EventArgs e )
 		{
-            SelectedPortName = (string)PortNameCombo.SelectedItem;
+			SelectedPortName = (string)PortNameCombo.SelectedItem;
 			OpenSelectedPort();
-            CommandEntryTextBox.Focus();
-        }
+			CommandEntryTextBox.Focus();
+		}
 
-        private void OpenCloseButton_Click( object sender, EventArgs e )
+		private void OpenCloseButton_Click( object sender, EventArgs e )
 		{
 			if( IsOpen )
 				ClosePort();
 			else
 				OpenSelectedPort();
-            CommandEntryTextBox.Focus();
-        }
+			CommandEntryTextBox.Focus();
+		}
 
-        private void SettingsButton_Click( object sender, EventArgs e )
+		private void SettingsButton_Click( object sender, EventArgs e )
 		{
 			// ClosePort();
 
-			var dlg = new PortSettingsForm( Port );
-            dlg.AutoReconnect = AutoReconnect;
+			var dlg = new PortSettingsForm( Port, PortSettings );
 			var result = dlg.ShowDialog( this );
 
 			if( result == System.Windows.Forms.DialogResult.OK )
 			{
-                AutoReconnect = dlg.AutoReconnect;
-                switch( PortSettings.EnterSends )
+				switch( PortSettings.EnterSends )
 				{
 				case EnterSends.CR:
 					EnterSequence = CR;
@@ -355,10 +363,10 @@ namespace Termulator
 				}
 			}
 
-            CommandEntryTextBox.Focus();
-        }
+			CommandEntryTextBox.Focus();
+		}
 
-        private void InvokeSetRunning( bool ifChecked )
+		private void InvokeSetRunning( bool ifChecked )
 		{
 			Invoke( new Action<bool>( SetRunning ), new object[] { ifChecked } );
 		}
@@ -366,14 +374,14 @@ namespace Termulator
 		private void SetRunning( bool ifRunning )
 		{
 			CommandEntryTextBox.Enabled = ifRunning;
-            CommandEntryTextBox.Focus();
-        }
+			CommandEntryTextBox.Focus();
+		}
 
-        #endregion
+		#endregion
 
-        #region // Reader Thread //////////////////////////////////////////////
+		#region // Reader Thread //////////////////////////////////////////////
 
-        Thread ReaderThread;
+		Thread ReaderThread;
 		bool ReaderRunning;
 
 		void StartReaderThread()
@@ -402,64 +410,114 @@ namespace Termulator
 			InvokeSetRunning( true );
 			string portName = Port.PortName;
 
-            Invoke( new Action( SendInitialCommand ) );
+			Invoke( new Action( SendInitialCommand ) );
 
-            while( ReaderRunning && Port != null )
-            {
-                try
-                {
-                    string line;
+			const int BufferSize = 1200;
+			byte[] bytes = new byte[ BufferSize ];
 
-                    line = Port.ReadExisting();     // .ReadLine();
+			while( ReaderRunning && Port != null )
+			{
+				try
+				{
+					// TODO: .ReadExisting() & convert to bytes?
+					int count = Port.Read( bytes, 0, BufferSize );
+					if( count > 0 )
+					{
+						AppendBytes( bytes, count );
+					}
+				}
+				catch( TimeoutException )
+				{
+					continue;    // ignore timeout
+				}
+				catch( ThreadAbortException )
+				{
+					break;
+				}
+				catch( Exception ex )
+				{
+					if( ReaderRunning && Port != null )
+					{
+						string msg = "ReaderThread exception on "
+							+ portName
+							+ ": "
+							+ ex.Message;
+						Debug.WriteLine( msg );
+						InvokeAppendText( msg );
 
-                    if( line == null )
-                        break;
+						if( !AutoReconnect )
+							break;  // exit thread
 
-                    if( line == "" )
-                    {
-                        Thread.Sleep( 200 );
-                        continue;
-                    }
+						// else try to reconnect
+						InvokeAppendText( "\nReconnecting...");
 
-                    InvokeAppendText( line );
-                }
-                catch( ThreadAbortException )
-                {
-                    break;
-                }
-                catch( Exception ex )
-                {
-                    if( ReaderRunning && Port != null )
-                    {
-                        string msg = "ReaderThread exception on "
-                            + portName
-                            + ": "
-                            + ex.Message;
-                        Debug.WriteLine( msg );
-                        InvokeAppendText( msg );
+						while( ReaderRunning && Port != null )
+						{
+							Thread.Sleep( 500 );
+							TryOpenPort();
+							if( Port.IsOpen )
+							{
+								InvokeAppendText( "... Reconnected\n" );
+								break;  // out of inner loop and continue in outer one
+							}
+						}
+					}
+				}
+			}
 
-                        if( !AutoReconnect )
-                            break;  // exit thread
-
-                        // else try to reconnect
-                        InvokeAppendText( "\nReconnecting...");
-
-                        while( ReaderRunning && Port != null )
-                        {
-                            Thread.Sleep( 500 );
-                            TryOpenPort();
-                            if( Port.IsOpen )
-                            {
-                                InvokeAppendText( "... Reconnected\n" );
-                                break;  // out of inner loop and continue in outer one
-                            }
-                        }
-                    }
-                }
-            }
-
-            Debug.WriteLine( "ReaderThread Exits" );
+			Debug.WriteLine( "ReaderThread Exits" );
 			Invoke( new Action( ReaderThreadStopped ) );
+		}
+
+		public void AppendBytes( byte[] bytes, int count )
+		{
+			if( PortSettings.Strip8thBit )
+			{
+				for( int i = 0; i < count; i++ )
+				{
+					bytes[ i ] &= 0x7f;
+				}
+			}
+
+			string s = Encoding.ASCII.GetString( bytes, 0, count );
+			s = TranslateText( s );
+			InvokeAppendText( s );
+		}
+
+		void InvokeAppendText( string text )
+		{
+			Invoke( new Action<string>( AppendText ), new object[] { text } );
+		}
+
+		// HERe'S THE NEW RULE [supposedly according to the HTML5 spec] 
+		// textareas [which are not exactly same as textbox] should return 
+		// CRLF for each newline.
+		//
+		// Patterns for newline on input streams:
+		// 1. every two-character string consisting of a "CRLF"character pair.
+		// 2. every occurrence of a "CR" not followed by a "LF". 
+		// 3. every occurrence of a "LF" (U+000A) character not preceded by a "CR"
+		//
+		// "CR" = (U+000D) 
+		// "LF" = (U+000A) 
+		// per https://stackoverflow.com/questions/14217101/what-character-represents-a-new-line-in-a-text-area
+
+		public string TranslateText( string text )
+		{
+			if( PortSettings.Edit_NL_To_CRLF )
+			{
+				text = text.Replace( LF, CRLF );
+			}
+			if( PortSettings.Edit_CR_To_CRLF )
+			{
+				text = text.Replace( CR, CRLF );
+			}
+			if( PortSettings.ShowNonprinting )
+			{
+				text = CharMap.Convert( text );
+			}
+
+			return text;
 		}
 
 		void ReaderThreadStopped()
@@ -472,11 +530,6 @@ namespace Termulator
 		#endregion
 
 		#region // Append text ////////////////////////////////////////////////
-
-		void InvokeAppendText( string text )
-		{
-			Invoke( new Action<string>( AppendText ), new object[] { text } );
-		}
 
 		// append received text, subject to translations
 
@@ -544,24 +597,6 @@ namespace Termulator
 					dt.Minute,
 					dt.Second,
 					dt.Millisecond );
-		}
-
-		public string TranslateText( string text )
-		{
-			if( PortSettings.Edit_NL_To_CRLF )
-			{
-				text = text.Replace( LF, CRLF );
-			}
-			if( PortSettings.Edit_CR_To_CRLF )
-			{
-				text = text.Replace( CR, CRLF );
-			}
-			if( PortSettings.ShowNonprinting )
-			{
-				text = CharMap.Convert( text );
-			}
-
-			return text;
 		}
 
 		void ScrollToEnd()
@@ -817,16 +852,16 @@ namespace Termulator
 			}
 		}
 
-        private void SendInitialCommand()
-        {
-            SendCommandNoHistory( InitialCommand );
-        }
+		private void SendInitialCommand()
+		{
+			SendCommandNoHistory( InitialCommand );
+		}
 
-        #endregion
+		#endregion
 
-        #region // Transcript Context Menu Actions ////////////////////////////
+		#region // Transcript Context Menu Actions ////////////////////////////
 
-        private void copyToolStripMenuItem_Click( object sender, EventArgs e )
+		private void copyToolStripMenuItem_Click( object sender, EventArgs e )
 		{
 			TranscriptTextBox.Copy();
 		}
@@ -894,9 +929,15 @@ namespace Termulator
 
 				using( TextWriter writer = File.CreateText( name ) )
 				{
-					writer.Write( TranscriptTextBox.Text );
+					string text = Vis( TranscriptTextBox.Text );
+					writer.Write( text );
 				}
 			}
+		}
+
+		private string Vis(string text )
+		{
+			return text.Replace( "\r", "\\r" );
 		}
 
 		private void DownloadFileToolStripMenuItem_Click( object sender, EventArgs e )
@@ -976,16 +1017,16 @@ namespace Termulator
 			AppendTextLine( text );
 		}
 
-        #endregion
+		#endregion
 
-        private void TranscriptTextBox_PreviewKeyDown( object sender, PreviewKeyDownEventArgs e )
-        {
-            CommandEntryTextBox.Focus();
-        }
+		private void TranscriptTextBox_PreviewKeyDown( object sender, PreviewKeyDownEventArgs e )
+		{
+			CommandEntryTextBox.Focus();
+		}
 
-        private void saveScreenAsImageMenuItem_Click( object sender, EventArgs e )
-        {
+		private void saveScreenAsImageMenuItem_Click( object sender, EventArgs e )
+		{
 
-        }
-    }
+		}
+	}
 }

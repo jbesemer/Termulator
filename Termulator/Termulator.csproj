@@ -52,9 +52,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Terminator.ico</ApplicationIcon>
+    <ApplicationIcon>Computer.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows" />
@@ -139,12 +140,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\info.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\help_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
@@ -162,20 +157,21 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\SharedLibrary\SharedLibrary\SharedLibrary.csproj">
+      <Project>{03ab3314-c3c1-4f3b-b336-deddf6dece6f}</Project>
+      <Name>SharedLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Library\Library.csproj">
       <Project>{a740be5e-a662-488a-9993-1b0bce29e4fb}</Project>
       <Name>Library</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="cmatrix.ico" />
-    <Content Include="Images\Arnold1.ico" />
-    <Content Include="Images\cmatrix.ico" />
-    <Content Include="Images\cmatrix.png" />
-    <Content Include="Images\Icon1.ico" />
-    <Content Include="Images\Terminator.ico" />
-    <Content Include="Terminator.ico" />
+    <Content Include="Computer.ico" />
+    <Content Include="Images\help_16x16.png" />
+    <Content Include="Images\info.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

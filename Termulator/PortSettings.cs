@@ -9,36 +9,37 @@ namespace Termulator
 {
 	public enum EnterSends { CR, LF, CRLF }
 
-	public static class PortSettings
+	public class PortSettings
 	{
-		public static readonly String ObisDefaultPortSettings = "115200,8,-1,0,1,0,1,0";
+		public const String ObisDefaultPortSettings = "115200,8,-1,0,1,0,1,0,0,0";
+		public const String MeterlessPowerDefaultPortSettings = "9600,8,-1,0,1,0,1,0,0,0";
 
-		public static readonly String ParameterSeparator = ",";
-		public static readonly char[] NameSeparator = { ':' };
+		public const String ParameterSeparator = ",";
+		public readonly char[] NameSeparator = { ':' };
 		public const int MinParameterCount = 6;
 
 		public const int InfiniteTimeout = -1;
 
-		public static EnterSends EnterSends { get; private set; }
+		public EnterSends EnterSends { get; private set; }
 
-		public static bool Edit_NL_To_CRLF { get; private set; }
-		public static bool Edit_CR_To_CRLF { get; private set; }
-		public static bool ShowNonprinting { get; private set; }
-		public static bool ShowWhitespace { get; private set; }
+		public bool Edit_NL_To_CRLF { get; private set; }
+		public bool Edit_CR_To_CRLF { get; private set; }
+		public bool ShowNonprinting { get; private set; }
+		public bool ShowWhitespace { get; private set; }
+		public bool Strip8thBit { get; private set; }
+		public bool Show8thBit { get; private set; }
 
 		#region // Port settings History //////////////////////////////////////
 
-		public static Dictionary<string,string>Previous;
+		public Dictionary<string,string>Previous;
 
-		static PortSettings()
+		public PortSettings()
 		{
-			LoadAllPrevious();
 		}
 
-		public static void LoadAllPrevious()
+		public void LoadAllPrevious(StringCollection settings)
 		{
 			Previous = new Dictionary<string, string>();
-			var settings = Properties.Settings.Default.ComPortSettings;
 
 			if( settings != null )
 			{
@@ -53,7 +54,7 @@ namespace Termulator
 			}
 		}
 
-		public static void SaveAllPrevious()
+		public StringCollection SaveAllPrevious()
 		{
 			var coll = new StringCollection();
 
@@ -67,28 +68,32 @@ namespace Termulator
 						kvp.Value ) );
 			}
 
-			Properties.Settings.Default.ComPortSettings = coll;
-			Properties.Settings.Default.Save();
+			return coll;
 		}
 
-		public static string GetPreviousSettings( string portName )
+		public string GetPreviousSettings( string portName )
 		{
-			string value = ObisDefaultPortSettings;
-			Previous.TryGetValue( portName, out value );	// overwrite default with previous, if any
-			return value;
+			string value = null;
+			Previous.TryGetValue( portName, out value );    // overwrite default with previous, if any
+			return value ?? ObisDefaultPortSettings;
 		}
 
-		public static void SavePreviousSettings( string portName, string setting )
+		public void SavePreviousSettings( string portName, string setting )
 		{
 			Previous[ portName ] = setting;
 			SaveAllPrevious();
+		}
+
+		public void RestorePreviousSettings( SerialPort port )
+		{
+			Decode( port, GetPreviousSettings( port.PortName ) );
 		}
 
 		#endregion
 
 		#region // Encode /////////////////////////////////////////////////////
 
-		public static string Encode( SerialPort port )
+		public string Encode( SerialPort port )
 		{
 			int[] fields 
 				= new int[]{
@@ -103,14 +108,16 @@ namespace Termulator
 					Encode( ShowNonprinting ),
 					Encode( ShowWhitespace ),
 					(int)EnterSends,
+					Encode( Strip8thBit ),
+					Encode( Show8thBit ),
 				};
 
 			return Encode( fields );
 		}
 
-		public static int Encode( bool value ) { return ( value ? 1 : 0 ); }
+		public int Encode( bool value ) { return ( value ? 1 : 0 ); }
 		
-		public static string Encode( int[] fields )
+		public string Encode( int[] fields )
 		{
 			string[] strings = new string[ fields.Length ];
 
@@ -126,7 +133,7 @@ namespace Termulator
 
 		#region // Decode /////////////////////////////////////////////////////
 
-		public static int[] Decode( string settings )
+		public int[] Decode( string settings )
 		{
 			string[] fields = settings.Split( ParameterSeparator[0]);
 			int[] ints = new int[ fields.Length ];
@@ -139,7 +146,7 @@ namespace Termulator
 			return ints;
 		}
 
-		public static void Decode( SerialPort port, string settings )
+		public void Decode( SerialPort port, string settings )
 		{
 			int[] fields = Decode( settings );
 
@@ -167,6 +174,12 @@ namespace Termulator
 				if( fields.Length >= 11 )
 					EnterSends = (EnterSends)fields[ 10 ];
 
+				if( fields.Length >= 12 )
+					Strip8thBit = ( fields[ 11 ] != 0 );
+
+				if( fields.Length >= 12 )
+					Show8thBit = ( fields[ 12 ] != 0 );
+
 				SavePreviousSettings( port.PortName, settings );
 			}
 			else
@@ -175,7 +188,7 @@ namespace Termulator
 			}
 		}
 
-		public static void SetObisDefaults( SerialPort port )
+		public void SetObisDefaults( SerialPort port )
 		{
 			Decode( port, ObisDefaultPortSettings );
 		}
@@ -184,7 +197,7 @@ namespace Termulator
 
 		#region // Encode/decode helpers //////////////////////////////////////
 
-		public static string EncodeTimeout( int timeout )
+		public string EncodeTimeout( int timeout )
 		{
 			return
 				( timeout < 0 )
@@ -192,7 +205,7 @@ namespace Termulator
 					: timeout.ToString();
 		}
 
-		public static int DecodeTimeout( string s )
+		public int DecodeTimeout( string s )
 		{
 			int timeout;
 
@@ -203,7 +216,7 @@ namespace Termulator
 			return timeout;
 		}
 
-		public static int GetInt( string s )
+		public int GetInt( string s )
 		{
 			int n;
 
