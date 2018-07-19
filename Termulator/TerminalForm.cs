@@ -136,8 +136,7 @@ namespace Termulator
 			DownloadFilename = Properties.Settings.Default.DownloadFilename;
 			DownloadTraceDataSent = Properties.Settings.Default.DownloadTraceDataSent;
 
-			CommandEntryTextBox.Select();
-			CommandEntryTextBox.Focus();
+			CommandEntryTextBox_Activate();
 		}
 
 		private void TerminalForm_FormClosed( object sender, FormClosedEventArgs e )
@@ -256,8 +255,7 @@ namespace Termulator
 				if( name != null )
 					AppendAnnotation( "/// " + name + " Opened ///" );
 
-				CommandEntryTextBox.Select();
-				CommandEntryTextBox.Focus();
+				CommandEntryTextBox_Activate();
 
 				StartReaderThread();
 			}
@@ -328,7 +326,7 @@ namespace Termulator
 		{
 			SelectedPortName = (string)PortNameCombo.SelectedItem;
 			OpenSelectedPort();
-			CommandEntryTextBox.Focus();
+			CommandEntryTextBox_Activate();
 		}
 
 		private void OpenCloseButton_Click( object sender, EventArgs e )
@@ -337,7 +335,7 @@ namespace Termulator
 				ClosePort();
 			else
 				OpenSelectedPort();
-			CommandEntryTextBox.Focus();
+			CommandEntryTextBox_Activate();
 		}
 
 		private void SettingsButton_Click( object sender, EventArgs e )
@@ -363,7 +361,7 @@ namespace Termulator
 				}
 			}
 
-			CommandEntryTextBox.Focus();
+			CommandEntryTextBox_Activate();
 		}
 
 		private void InvokeSetRunning( bool ifChecked )
@@ -374,7 +372,7 @@ namespace Termulator
 		private void SetRunning( bool ifRunning )
 		{
 			CommandEntryTextBox.Enabled = ifRunning;
-			CommandEntryTextBox.Focus();
+			CommandEntryTextBox_Activate();
 		}
 
 		#endregion
@@ -789,9 +787,16 @@ namespace Termulator
 
 		#endregion
 
-		#region // Text Entry /////////////////////////////////////////////////
+		#region // CommandEntryTextBox Keyboard ///////////////////////////////
 
-		private void textEntry_KeyPress( object sender, KeyPressEventArgs e )
+		private void CommandEntryTextBox_Activate()
+		{
+			CommandEntryTextBox.Select();
+			CommandEntryTextBox.Focus();
+			// https://stackoverflow.com/questions/802722/whats-the-difference-between-control-select-and-control-focus
+		}
+
+		private void CommandEntryTextBox_KeyPress( object sender, KeyPressEventArgs e )
 		{
 			switch( e.KeyChar )
 			{
@@ -804,7 +809,7 @@ namespace Termulator
 			}
 		}
 
-		private void textEntry_KeyDown( object sender, KeyEventArgs e )
+		private void CommandEntryTextBox_KeyDown( object sender, KeyEventArgs e )
 		{
 			switch( e.KeyCode )
 			{
@@ -814,6 +819,14 @@ namespace Termulator
 
 			case Keys.Down:
 				CommandHistory.Forward();
+				break;
+
+			case Keys.Home:
+				CommandHistory.Home();
+				break;
+
+			case Keys.End:
+				CommandHistory.End();
 				break;
 
 			default:
@@ -1017,16 +1030,11 @@ namespace Termulator
 			AppendTextLine( text );
 		}
 
-		#endregion
-
-		private void TranscriptTextBox_PreviewKeyDown( object sender, PreviewKeyDownEventArgs e )
-		{
-			CommandEntryTextBox.Focus();
-		}
-
 		private void saveScreenAsImageMenuItem_Click( object sender, EventArgs e )
 		{
 
 		}
+
+		#endregion
 	}
 }

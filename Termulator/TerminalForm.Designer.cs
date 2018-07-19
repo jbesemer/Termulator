@@ -82,8 +82,8 @@
 			this.CommandEntryTextBox.Size = new System.Drawing.Size(347, 20);
 			this.CommandEntryTextBox.TabIndex = 4;
 			this.CommandEntryTextBox.Enter += new System.EventHandler(this.CommandEntryTextBox_FocusEnter);
-			this.CommandEntryTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textEntry_KeyDown);
-			this.CommandEntryTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textEntry_KeyPress);
+			this.CommandEntryTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CommandEntryTextBox_KeyDown);
+			this.CommandEntryTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CommandEntryTextBox_KeyPress);
 			// 
 			// CommandContextMenu
 			// 
@@ -133,7 +133,6 @@
 			this.TranscriptTextBox.Size = new System.Drawing.Size(346, 407);
 			this.TranscriptTextBox.TabIndex = 4;
 			this.TranscriptTextBox.Enter += new System.EventHandler(this.TranscriptTextBox_FocusEnter);
-			this.TranscriptTextBox.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.TranscriptTextBox_PreviewKeyDown);
 			// 
 			// TranscriptContextMenu
 			// 
@@ -153,7 +152,7 @@
             this.saveToDiskToolStripMenuItem,
             this.UnicodeUnitTestToolStripMenuItem});
 			this.TranscriptContextMenu.Name = "contextMenuStrip1";
-			this.TranscriptContextMenu.Size = new System.Drawing.Size(265, 286);
+			this.TranscriptContextMenu.Size = new System.Drawing.Size(265, 264);
 			// 
 			// clearTextToolStripMenuItem
 			// 

@@ -57,7 +57,7 @@ UsePreviousAppDir=no
 UsePreviousGroup=no
 
 ;;;; Tools/Configure Sign Tool must define "byparam=$p"
-SignTool=byparam $q{#SourcePath}\Misc\SignTool.exe$q sign /f $q{#SourcePath}\Misc\mycert.pfx$q /p c0herent.0 /t http://timestamp.verisign.com/scripts/timstamp.dll $f
+SignTool=porprima $q{#SourcePath}\Misc\SignTool.exe$q sign /f $q{#SourcePath}\Misc\mycert.pfx$q /p c0herent.0 /t http://timestamp.verisign.com/scripts/timstamp.dll $f
 ;;;;;;;;;;;SignTool=byparam $q{#SourcePath}\Misc\SignTool.exe$q sign /f $q{#SourcePath}\Misc\mycert.pfx$q /p C0herent.0 /t http://timestamp.verisign.com/scripts/timstamp.dll $f
 
 [Icons]
