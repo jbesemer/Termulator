@@ -11,6 +11,11 @@ namespace Library
 
 	public class UnicodeControlCharacters
 	{
+		public const string LF = "\n";
+		public const string CR = "\r";
+		public const string CRLF = "\r\n";
+		public static readonly char[] LF_char = new char[] { '\n' };
+
 		private Dictionary<char,string> Encoding = new Dictionary<char, string>();
 
 		public Dictionary<char, string>.KeyCollection Keys { get { return Encoding.Keys; } }
@@ -32,7 +37,7 @@ namespace Library
 			// Debug.WriteLine( "{0:x2}: {1}", code, s );
 		}
 
-		public UnicodeControlCharacters( SelectedVisibleCharacters selected )
+		public UnicodeControlCharacters()
 		{
 			for( int i = 0; i <= 0x20; i++ )
 				AddEntry( i );
@@ -51,10 +56,10 @@ namespace Library
 			foreach( char c in s )
 			{
 				r += Convert( c );
+				// if just converted NL, convert to NEWLINE for Text box (Forms: FML)
 				if( c == '\n' )
 				{
-					r += '\r';
-					r += '\n';
+					r += CRLF;
 				}
 			}
 

@@ -100,6 +100,7 @@
 			this.FontNameComboBox.Name = "FontNameComboBox";
 			this.FontNameComboBox.Size = new System.Drawing.Size(156, 21);
 			this.FontNameComboBox.TabIndex = 1;
+			this.FontNameComboBox.SelectedValueChanged += new System.EventHandler(this.FontNameComboBox_SelectedValueChanged);
 			// 
 			// label6
 			// 

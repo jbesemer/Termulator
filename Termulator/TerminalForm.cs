@@ -26,7 +26,7 @@ namespace Termulator
 	//      convert to WPF
 	//      separate ReaderThread class
 	//      Friendly names
-	//      Surprise Disconnect ?
+	//      implement Surprise Disconnect
 	//      redirect all keyboard to command box
 
 	public partial class TerminalForm : Form
@@ -49,7 +49,7 @@ namespace Termulator
 
 		public PortSettings PortSettings { get; protected set; }
 
-		SerialPort Port { get; set; }
+		protected SerialPort Port { get; set; }
 
 		public string PortName { get { return Port?.PortName; } }
 
@@ -59,7 +59,7 @@ namespace Termulator
 
 		public Stopwatch Stopwatch = new Stopwatch();
 
-		UnicodeControlCharacters CharMap = new UnicodeControlCharacters( 0 );
+		protected UnicodeControlCharacters CharMap = new UnicodeControlCharacters();
 
 		public bool AutoReconnect { get; protected set; }
 
@@ -79,7 +79,7 @@ namespace Termulator
 			historyToolStripMenuItem.Tag = 0;
 			PortSettings = new PortSettings();
 
-			SelectFontToolStripMenuItem.Visible = false;	// unimplemented
+			//SelectFontToolStripMenuItem.Visible = false;	// unimplemented
 		}
 		
 		#endregion
@@ -419,10 +419,7 @@ namespace Termulator
 				{
 					// TODO: .ReadExisting() & convert to bytes?
 					int count = Port.Read( bytes, 0, BufferSize );
-					if( count > 0 )
-					{
-						AppendBytes( bytes, count );
-					}
+					AppendBytes( bytes, count );
 				}
 				catch( TimeoutException )
 				{
@@ -467,8 +464,34 @@ namespace Termulator
 			Invoke( new Action( ReaderThreadStopped ) );
 		}
 
+		public void TraceRead( byte[] bytes, int count )
+		{
+			string s = Encoding.ASCII.GetString( bytes, 0, count );
+			Debug.WriteLine( $"TraceRead[{count}]: {s.Visible()}" );
+
+			if( ShowBinary )
+			{
+				string data = "";
+				for( var i = 0; i < count; i++ )
+				{
+					data += bytes[ i ].ToString( "X2" );
+					if( i > 0 )
+						data += ", ";
+				}
+
+				Debug.WriteLine( $"TraceRead[{count}]: {data}" );
+			}
+		}
+
+		public bool ShowBinary = false;
+
 		public void AppendBytes( byte[] bytes, int count )
 		{
+			TraceRead( bytes, count );
+
+			if( count <= 0 )
+				return;
+
 			if( PortSettings.Strip8thBit )
 			{
 				for( int i = 0; i < count; i++ )
@@ -478,7 +501,6 @@ namespace Termulator
 			}
 
 			string s = Encoding.ASCII.GetString( bytes, 0, count );
-			s = TranslateText( s );
 			InvokeAppendText( s );
 		}
 
@@ -902,8 +924,9 @@ namespace Termulator
 
 		private void SelectFontToolStripMenuItem_Click( object sender, EventArgs e )
 		{
-			var dlg = new SelectFontForm(){
-				SelectedFontName = TranscriptTextBox.Font.FontFamily.ToString(),
+			var dlg = new SelectFontForm()
+			{
+				SelectedFontName = TranscriptTextBox.Font.FontFamily.Name, // ToString(),
 				SelectedFontSize = TranscriptTextBox.Font.Size,
 				FontBold = TranscriptTextBox.Font.Bold,
 				FontItalic = TranscriptTextBox.Font.Italic,
@@ -913,7 +936,35 @@ namespace Termulator
 
 			if( result == System.Windows.Forms.DialogResult.OK )
 			{
+				try
+				{
+					var family = new FontFamily( dlg.SelectedFontName );
+					var font = new Font(
+						family,
+						dlg.SelectedFontSize,
+						GetStyle( dlg.FontBold, dlg.FontItalic ),
+						GraphicsUnit.Point );
+					TranscriptTextBox.Font = font;
+				}
+				catch( Exception ex )
+				{
+					MessageBox.Show(
+						ex.Message,
+						"Error creating font",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error );
+				}
 			}
+		}
+
+		private FontStyle GetStyle( bool ifBold, bool ifItalic )
+		{
+			if( ifBold )
+				return FontStyle.Bold;
+			if( ifItalic )
+				return FontStyle.Italic;
+			else
+				return FontStyle.Regular;
 		}
 
 		private void saveToDiskToolStripMenuItem_Click( object sender, EventArgs e )
@@ -983,7 +1034,6 @@ namespace Termulator
 				AppendTextLine( "Exception: " + ex.Message );
 				ClosePort();
 			}
-
 		}
 
 		#endregion
