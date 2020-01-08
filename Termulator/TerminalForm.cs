@@ -1,4 +1,5 @@
 ﻿#define RESTORE_PREVIOUS_SELECTED_PORT
+// #define TRACE_READS
 
 using System;
 using System.Collections.Generic;
@@ -461,6 +462,7 @@ namespace Termulator
 
 		public bool ShowBinary = false;
 
+		[Conditional( "TRACE_READS" )]
 		public void TraceRead( byte[] bytes, int count )
 		{
 			string s = Encoding.ASCII.GetString( bytes, 0, count );
@@ -569,14 +571,11 @@ namespace Termulator
 		void AppendTranscript( string text )
 		{
 			if( showTimingToolStripMenuItem.Checked ) {
-				TranscriptTextBox.Text += PrefaceLinesWithTimestamp.Current
+				text = PrefaceLinesWithTimestamp.Current
 					.Convert( text );
 			}
-			else
-			{
-				TranscriptTextBox.Text += text;
-			}
 
+			TranscriptTextBox.Text += text;
 			ScrollToEnd();
 		}
 

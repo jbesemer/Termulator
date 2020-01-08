@@ -71,7 +71,7 @@ namespace Library
 			return r;
 		}
 
-		public static string Timestamp()
+		public virtual string Timestamp()
 		{
 			DateTime dt = DateTime.Now;
 			return
