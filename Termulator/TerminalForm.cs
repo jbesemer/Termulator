@@ -40,12 +40,7 @@ namespace Termulator
 		public const string HELP_FILENAME = @"Termulator.pdf";
 		public const string InitialCommand = "*IDN?";
 
-		public const string LF = "\n";
-		public const string CR = "\r";
-		public const string CRLF = "\r\n";
-		public static readonly char[] LF_char = new char[] { '\n' };
-
-		public static string EnterSequence = CR;
+		public static string EnterSequence = Const.CR;
 
 		public PortSettings PortSettings { get; protected set; }
 
@@ -350,13 +345,13 @@ namespace Termulator
 				switch( PortSettings.EnterSends )
 				{
 				case EnterSends.CR:
-					EnterSequence = CR;
+					EnterSequence = Const.CR;
 					break;
 				case EnterSends.LF:
-					EnterSequence = LF;
+					EnterSequence = Const.LF;
 					break;
 				case EnterSends.CRLF:
-					EnterSequence = CRLF;
+					EnterSequence = Const.CRLF;
 					break;
 				}
 			}
@@ -464,6 +459,8 @@ namespace Termulator
 			Invoke( new Action( ReaderThreadStopped ) );
 		}
 
+		public bool ShowBinary = false;
+
 		public void TraceRead( byte[] bytes, int count )
 		{
 			string s = Encoding.ASCII.GetString( bytes, 0, count );
@@ -483,8 +480,6 @@ namespace Termulator
 			}
 		}
 
-		public bool ShowBinary = false;
-
 		public void AppendBytes( byte[] bytes, int count )
 		{
 			TraceRead( bytes, count );
@@ -492,6 +487,7 @@ namespace Termulator
 			if( count <= 0 )
 				return;
 
+			// needed this for Legacy Energy
 			if( PortSettings.Strip8thBit )
 			{
 				for( int i = 0; i < count; i++ )
@@ -509,28 +505,28 @@ namespace Termulator
 			Invoke( new Action<string>( AppendText ), new object[] { text } );
 		}
 
-		// HERe'S THE NEW RULE [supposedly according to the HTML5 spec] 
-		// textareas [which are not exactly same as textbox] should return 
-		// CRLF for each newline.
-		//
-		// Patterns for newline on input streams:
-		// 1. every two-character string consisting of a "CRLF"character pair.
-		// 2. every occurrence of a "CR" not followed by a "LF". 
-		// 3. every occurrence of a "LF" (U+000A) character not preceded by a "CR"
-		//
-		// "CR" = (U+000D) 
-		// "LF" = (U+000A) 
-		// per https://stackoverflow.com/questions/14217101/what-character-represents-a-new-line-in-a-text-area
+		void ReaderThreadStopped()
+		{
+			Debug.WriteLine( "ReaderThread Stopped" );
+			// AppendText( "Exiting Reader Thread" );
+			SetRunning( false );
+		}
 
-		public string TranslateText( string text )
+		#endregion
+
+		#region // TransformText //////////////////////////////////////////////
+
+		// transform certain character sequences 
+
+		public string TransformText( string text )
 		{
 			if( PortSettings.Edit_NL_To_CRLF )
 			{
-				text = text.Replace( LF, CRLF );
+				text = text.Replace( Const.LF, Const.CRLF );
 			}
 			if( PortSettings.Edit_CR_To_CRLF )
 			{
-				text = text.Replace( CR, CRLF );
+				text = text.Replace( Const.CR, Const.CRLF );
 			}
 			if( PortSettings.ShowNonprinting )
 			{
@@ -538,13 +534,6 @@ namespace Termulator
 			}
 
 			return text;
-		}
-
-		void ReaderThreadStopped()
-		{
-			Debug.WriteLine( "ReaderThread Stopped" );
-			// AppendText( "Exiting Reader Thread" );
-			SetRunning( false );
 		}
 
 		#endregion
@@ -555,14 +544,14 @@ namespace Termulator
 
 		void AppendText( string text )
 		{
-			AppendTranscript( TranslateText( text ));
+			AppendTranscript( TransformText( text ));
 		}
 
 		// append text without translations and followed by newline
 
 		void AppendTextLine( string text = "" )
 		{
-			AppendTranscript( text + CRLF );
+			AppendTranscript( text + Const.CRLF );
 		}
 
 		// append text line preceeded by blank line (unless 1st line in transcript)
@@ -579,44 +568,16 @@ namespace Termulator
 
 		void AppendTranscript( string text )
 		{
-			TranscriptTextBox.Text += AppendTranscriptWithTimestamp( text );
-			ScrollToEnd();
-		}
-
-		string AppendTranscriptWithTimestamp( string text )
-		{
-
-			if( showTimingToolStripMenuItem.Checked )
-			{
-				StringBuilder r = new StringBuilder();
-				string[] lines 
-					= text.Split(
-						LF_char,
-						StringSplitOptions.RemoveEmptyEntries);
-
-				foreach( string line in lines )
-				{
-					r.Append( Timestamp() );
-					r.Append( line );
-					r.Append( "\n" );
-				}
-
-				return r.ToString();
+			if( showTimingToolStripMenuItem.Checked ) {
+				TranscriptTextBox.Text += PrefaceLinesWithTimestamp.Current
+					.Convert( text );
 			}
 			else
-				return text;
-		}
+			{
+				TranscriptTextBox.Text += text;
+			}
 
-		public string Timestamp()
-		{
-			DateTime dt = DateTime.Now;
-			return
-				string.Format(
-					"{0:d2}:{1:d2}:{2:d2}.{3:d3} ",
-					dt.Hour,
-					dt.Minute,
-					dt.Second,
-					dt.Millisecond );
+			ScrollToEnd();
 		}
 
 		void ScrollToEnd()

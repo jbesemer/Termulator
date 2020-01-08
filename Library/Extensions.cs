@@ -5,10 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+using SharedLibrary;
+
 namespace Library
 {
 	public static class Extensions
 	{
+		#region // Save/Load Form's LocationAndSize ///////////////////////////
+
 		// for resizable windows we want to save the location and size
 
 		public static string SaveLocationAndSize( this Form form )
@@ -45,6 +49,10 @@ namespace Library
 			}
 		}
 
+		#endregion
+
+		#region // CenterOnParent /////////////////////////////////////////////
+
 		public static void CenterOnParent( this Form form, string parentWindowLocationSize )
 		{
 			int[] settings;
@@ -79,6 +87,10 @@ namespace Library
 			}
 		}
 
+		#endregion
+
+		#region // string[] To/From StringCollection  /////////////////////////
+
 		public static void FromStrings( this StringCollection collection, string[] strings )
 		{
 			collection.Clear();
@@ -96,5 +108,53 @@ namespace Library
 
 			return strings;
 		}
+
+		#endregion
+
+		#region // PrefaceLinesWithTimestamp and Timestamp ////////////////////
+
+		public static string PrefaceLinesWithTimestamp( string text, bool continuing=false )
+		{
+			if( string.IsNullOrEmpty( text ) )
+				return "";
+
+			StringBuilder r = new StringBuilder();
+			string[] lines
+				= text.Replace( Const.CR, "" )
+					.Split( Const.LF_char );
+
+			bool complete = text.EndsWith( Const.LF );
+
+			for( int i = 0; i < lines.Length; i++ )
+			{
+				string line = lines[ i ];
+				// timestamp prefix for all except first line if continuing
+				if( i > 0 || !continuing )
+					r.Append( Timestamp() );
+
+				r.Append( line );
+
+				// newline suffix for all 
+				// but excluding last line if it is incomplete
+				if( i < lines.Length || complete )
+					r.Append( Const.CRLF );
+			}
+
+			return r.ToString();
+		}
+
+		public static string Timestamp()
+		{
+			DateTime dt = DateTime.Now;
+			return
+				string.Format(
+					"{0:d2}:{1:d2}:{2:d2}.{3:d3} ",
+					dt.Hour,
+					dt.Minute,
+					dt.Second,
+					dt.Millisecond );
+		}
+
+	#endregion
 	}
 }
