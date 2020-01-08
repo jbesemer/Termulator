@@ -12,8 +12,6 @@ using SharedLibrary;
 namespace Library
 {
 	public class PortManager
-		: IEnumerable
-		, IEnumerable<ComPortInfo>
 	{
 		#region // Properties and Accessors ///////////////////////////////////
 
@@ -24,6 +22,30 @@ namespace Library
 		protected List<ComPortInfo> AllPorts;
 		protected Dictionary<string, ComPortInfo> IndexByPortName;
 		protected Dictionary<string, ComPortInfo> IndexByFriendlyName;
+
+		public IEnumerable<ComPortInfo> FriendlyNames
+		{
+			get
+			{
+				return IndexByFriendlyName
+					.Values
+					.OrderBy( cpi => PortNameNumericSuffix( cpi.PortName ) );
+			}
+		}
+
+		private int PortNameNumericSuffix( string portname )
+		{
+			if( portname.StartsWith( "COM" ) )
+			{
+				string suffix = portname.Substring( 3 );
+				if( Int32.TryParse( suffix, out int value ) )
+				{
+					return value;
+				}
+			}
+
+			return 0;   // put non COM names first
+		}
 
 		// Accessors
 
@@ -53,20 +75,6 @@ namespace Library
 				&& IndexByPortName.Keys.Contains<string>( portName );
 		}
 
-
-		#endregion
-
-		#region // IEnumerator<ComPortInfo> ///////////////////////////////////
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return (IEnumerator)GetEnumerator();
-		}
-
-		public IEnumerator<ComPortInfo> GetEnumerator()
-		{
-			return (IEnumerator<ComPortInfo>)AllPorts.GetEnumerator(); // IndexByFriendlyName.Keys.GetEnumerator();
-		}
 
 		#endregion
 
@@ -115,32 +123,6 @@ namespace Library
 		{
 			IndexByFriendlyName[ info.FriendlyName ] = info;
 			IndexByPortName[ info.PortName ] = info;
-		}
-
-		#endregion
-
-		#region // FindQualifiedCandidate /////////////////////////////////////
-
-		// finds the first qualified candidate, intentionally ignoring an optional 
-		// port to be excluded.
-
-		public ComPortInfo FindQualifiedCandidate( string excludePort = null )
-		{
-			foreach( var info in this )
-				if( info.IsQualified && ( excludePort == null || info.PortName != excludePort ) )
-					return info;
-
-			return null;
-		}
-
-		public string FindQualifiedCandidateName( string excludePort = null )
-		{
-			var candidate = FindQualifiedCandidate( excludePort );
-
-			if( candidate != null )
-				return candidate.PortName;
-
-			return null;
 		}
 
 		#endregion

@@ -1,4 +1,5 @@
 ﻿#define RESTORE_PREVIOUS_SELECTED_PORT
+// #define SURPRISE_DISCONNECT	// not implemented or tested
 // #define TRACE_READS
 
 using System;
@@ -26,7 +27,6 @@ namespace Termulator
 	//      remember save folder
 	//      convert to WPF
 	//      separate ReaderThread class
-	//      Friendly names
 	//      implement Surprise Disconnect
 	//      redirect all keyboard to command box
 
@@ -43,13 +43,13 @@ namespace Termulator
 
 		public static string EnterSequence = Const.CR;
 
+		public PortManager PortManager;
+
 		public PortSettings PortSettings { get; protected set; }
 
 		protected SerialPort Port { get; set; }
 
 		public string PortName { get { return Port?.PortName; } }
-
-		public string SelectedPortName { get; protected set; }
 
 		public bool IsOpen { get { return Port != null && Port.IsOpen; } }
 
@@ -74,6 +74,7 @@ namespace Termulator
 			Text = "Termulator v" + Version;
 			historyToolStripMenuItem.Tag = 0;
 			PortSettings = new PortSettings();
+			PortManager = new PortManager();
 
 			//SelectFontToolStripMenuItem.Visible = false;	// unimplemented
 		}
@@ -100,23 +101,16 @@ namespace Termulator
 			DbtNotification.Removal += DbtNotification_Removal;
 #endif
 
-			string[] ports = SerialPort.GetPortNames();
-
-			foreach( string name in ports )
-				Debug.WriteLine( "Port: " + name );
-
-			PortNameCombo.Items.AddRange( ports );
+			// we fill combo with ComPortInfo structs for all existing ports
+			// the appear as the port "friendly names"
+			PortManager.Refresh();
+			PortNameCombo.Items.AddRange( PortManager.FriendlyNames.ToArray<object>() );
 
 #if RESTORE_PREVIOUS_SELECTED_PORT
-			SelectedPortName = Properties.Settings.Default.SelectedPort;
-			if( !string.IsNullOrEmpty( SelectedPortName ) )
-			{
-				int index = PortNameCombo.FindStringExact( SelectedPortName );
-				if( index >= 0 )
-				{
-					PortNameCombo.SelectedIndex = index;
-				}
-			}
+			// settings save/restoe the raw COM port name, not the friendly name
+			PortManager.SelectedPortName = Properties.Settings.Default.SelectedPort;
+			var selectedPort = PortManager[ PortManager.SelectedPortName ];
+			PortNameCombo.SelectedItem = selectedPort;
 #endif
 
 			autoScrollToEndToolStripMenuItem.Checked 
@@ -148,7 +142,11 @@ namespace Termulator
 
 			if( PortNameCombo.SelectedIndex >= 0 )
 			{
-				Properties.Settings.Default.SelectedPort = (string)PortNameCombo.SelectedItem;
+				Properties.Settings.Default.SelectedPort = PortManager.SelectedPortName;
+				var selectedPort = PortNameCombo.SelectedItem as ComPortInfo;
+				if( selectedPort?.PortName != PortManager.SelectedPortName )
+				{
+				}
 			}
 
 			Properties.Settings.Default.ScrollToEnd
@@ -175,9 +173,10 @@ namespace Termulator
 
 		private void OpenSelectedPort()
 		{
-			OpenPort( SelectedPortName );
+			OpenPort( PortManager.SelectedPortName );
+			CommandEntryTextBox_Activate();
 		}
-		
+
 		private void OpenPort( string portName )
 		{
 			ClosePort();
@@ -224,13 +223,13 @@ namespace Termulator
 		{
 			try
 			{
-				Port = new SerialPort( SelectedPortName );
+				Port = new SerialPort( PortManager.SelectedPortName );
 				PortSettings.SetObisDefaults( Port );
 				Port.Open();
 			}
 			catch( Exception e )
 			{
-				Debug.WriteLine( "TryOpenPort[ " + SelectedPortName + " ] exception: " + e.Message );
+				Debug.WriteLine( "TryOpenPort[ " + PortManager.SelectedPortName + " ] exception: " + e.Message );
 			}
 		}
 
@@ -320,9 +319,12 @@ namespace Termulator
 
 		private void PortNameCombo_SelectedIndexChanged( object sender, EventArgs e )
 		{
-			SelectedPortName = (string)PortNameCombo.SelectedItem;
-			OpenSelectedPort();
-			CommandEntryTextBox_Activate();
+			var selectedPort = PortNameCombo.SelectedItem as ComPortInfo;
+			PortManager.SelectedPortName = selectedPort?.PortName;
+			if( !string.IsNullOrEmpty( PortManager.SelectedPortName ) )
+			{
+				OpenSelectedPort();
+			}
 		}
 
 		private void OpenCloseButton_Click( object sender, EventArgs e )

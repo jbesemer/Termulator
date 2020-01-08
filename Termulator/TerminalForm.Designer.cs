@@ -64,7 +64,7 @@
 			// 
 			// SettingsButton
 			// 
-			this.SettingsButton.Location = new System.Drawing.Point(154, 6);
+			this.SettingsButton.Location = new System.Drawing.Point(286, 6);
 			this.SettingsButton.Name = "SettingsButton";
 			this.SettingsButton.Size = new System.Drawing.Size(60, 24);
 			this.SettingsButton.TabIndex = 7;
@@ -79,7 +79,7 @@
 			this.CommandEntryTextBox.ContextMenuStrip = this.CommandContextMenu;
 			this.CommandEntryTextBox.Location = new System.Drawing.Point(9, 451);
 			this.CommandEntryTextBox.Name = "CommandEntryTextBox";
-			this.CommandEntryTextBox.Size = new System.Drawing.Size(347, 20);
+			this.CommandEntryTextBox.Size = new System.Drawing.Size(402, 20);
 			this.CommandEntryTextBox.TabIndex = 4;
 			this.CommandEntryTextBox.Enter += new System.EventHandler(this.CommandEntryTextBox_FocusEnter);
 			this.CommandEntryTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CommandEntryTextBox_KeyDown);
@@ -130,7 +130,7 @@
 			this.TranscriptTextBox.Name = "TranscriptTextBox";
 			this.TranscriptTextBox.ReadOnly = true;
 			this.TranscriptTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.TranscriptTextBox.Size = new System.Drawing.Size(346, 407);
+			this.TranscriptTextBox.Size = new System.Drawing.Size(401, 407);
 			this.TranscriptTextBox.TabIndex = 4;
 			this.TranscriptTextBox.Enter += new System.EventHandler(this.TranscriptTextBox_FocusEnter);
 			// 
@@ -253,17 +253,18 @@
 			// 
 			// PortNameCombo
 			// 
+			this.PortNameCombo.DropDownWidth = 300;
 			this.PortNameCombo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.PortNameCombo.FormattingEnabled = true;
 			this.PortNameCombo.Location = new System.Drawing.Point(9, 6);
 			this.PortNameCombo.Name = "PortNameCombo";
-			this.PortNameCombo.Size = new System.Drawing.Size(73, 24);
+			this.PortNameCombo.Size = new System.Drawing.Size(204, 24);
 			this.PortNameCombo.TabIndex = 8;
 			this.PortNameCombo.SelectedIndexChanged += new System.EventHandler(this.PortNameCombo_SelectedIndexChanged);
 			// 
 			// OpenCloseButton
 			// 
-			this.OpenCloseButton.Location = new System.Drawing.Point(87, 6);
+			this.OpenCloseButton.Location = new System.Drawing.Point(219, 6);
 			this.OpenCloseButton.Name = "OpenCloseButton";
 			this.OpenCloseButton.Size = new System.Drawing.Size(62, 24);
 			this.OpenCloseButton.TabIndex = 11;
@@ -276,7 +277,7 @@
 			this.AboutPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.AboutPictureBox.BackgroundImage = global::Termulator.Properties.Resources.info;
 			this.AboutPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-			this.AboutPictureBox.Location = new System.Drawing.Point(315, 10);
+			this.AboutPictureBox.Location = new System.Drawing.Point(370, 10);
 			this.AboutPictureBox.Name = "AboutPictureBox";
 			this.AboutPictureBox.Size = new System.Drawing.Size(16, 16);
 			this.AboutPictureBox.TabIndex = 10;
@@ -289,7 +290,7 @@
 			this.HelpPictureBox.BackgroundImage = global::Termulator.Properties.Resources.help_16x16;
 			this.HelpPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this.HelpPictureBox.InitialImage = null;
-			this.HelpPictureBox.Location = new System.Drawing.Point(337, 10);
+			this.HelpPictureBox.Location = new System.Drawing.Point(392, 10);
 			this.HelpPictureBox.Name = "HelpPictureBox";
 			this.HelpPictureBox.Size = new System.Drawing.Size(16, 16);
 			this.HelpPictureBox.TabIndex = 9;
@@ -300,7 +301,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(362, 483);
+			this.ClientSize = new System.Drawing.Size(417, 483);
 			this.Controls.Add(this.OpenCloseButton);
 			this.Controls.Add(this.AboutPictureBox);
 			this.Controls.Add(this.HelpPictureBox);
