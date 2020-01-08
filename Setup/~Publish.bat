@@ -1,4 +1,7 @@
+rem copy build products to local Termulator bin directory
+
 set DEST=C:\Program Files (x86)\Coherent\Termulator
+:set BIN=Termulator\bin\Release
 set BIN=Termulator\bin\Debug
 set DOC=DOC
 set PLAYERBIN=C:\Program Files (x86)\SoundPlayer\
