@@ -47,7 +47,6 @@
 			this.autoScrollToEndToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showTimingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.SelectFontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.DecodeBinaryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.loadFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.saveToDiskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -146,7 +145,6 @@
             this.autoScrollToEndToolStripMenuItem,
             this.showTimingToolStripMenuItem,
             this.SelectFontToolStripMenuItem,
-            this.DecodeBinaryToolStripMenuItem,
             this.toolStripSeparator3,
             this.loadFileToolStripMenuItem,
             this.saveToDiskToolStripMenuItem,
@@ -217,13 +215,6 @@
 			this.SelectFontToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
 			this.SelectFontToolStripMenuItem.Text = "Select Font";
 			this.SelectFontToolStripMenuItem.Click += new System.EventHandler(this.SelectFontToolStripMenuItem_Click);
-			// 
-			// DecodeBinaryToolStripMenuItem
-			// 
-			this.DecodeBinaryToolStripMenuItem.CheckOnClick = true;
-			this.DecodeBinaryToolStripMenuItem.Name = "DecodeBinaryToolStripMenuItem";
-			this.DecodeBinaryToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
-			this.DecodeBinaryToolStripMenuItem.Text = "Decode Binary";
 			// 
 			// toolStripSeparator3
 			// 
@@ -346,7 +337,6 @@
 		private System.Windows.Forms.ContextMenuStrip CommandContextMenu;
 		private System.Windows.Forms.ToolStripMenuItem historyToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem favoritesToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem DecodeBinaryToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem UnicodeUnitTestToolStripMenuItem;
 		private System.Windows.Forms.Button OpenCloseButton;
 		private System.Windows.Forms.ToolStripMenuItem showTimingToolStripMenuItem;
