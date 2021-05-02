@@ -1,6 +1,7 @@
 ﻿#define RESTORE_PREVIOUS_SELECTED_PORT
 // #define SURPRISE_DISCONNECT	// not implemented or tested
 // #define TRACE_READS
+// #define TRACE_SENDS
 
 using System;
 using System.Collections.Generic;
@@ -462,28 +463,6 @@ namespace Termulator
 			Invoke( new Action( ReaderThreadStopped ) );
 		}
 
-		public bool ShowBinary = false;
-
-		[Conditional( "TRACE_READS" )]
-		public void TraceRead( byte[] bytes, int count )
-		{
-			string s = Encoding.ASCII.GetString( bytes, 0, count );
-			Debug.WriteLine( $"TraceRead[{count}]: {s.Visible()}" );
-
-			if( ShowBinary )
-			{
-				string data = "";
-				for( var i = 0; i < count; i++ )
-				{
-					data += bytes[ i ].ToString( "X2" );
-					if( i > 0 )
-						data += ", ";
-				}
-
-				Debug.WriteLine( $"TraceRead[{count}]: {data}" );
-			}
-		}
-
 		public void AppendBytes( byte[] bytes, int count )
 		{
 			TraceRead( bytes, count );
@@ -537,8 +516,13 @@ namespace Termulator
 				text = CharMap.Convert( text );
 			}
 
-			return text;
+			var replacement = removeRedundantCR.Replace( text, "\r" );
+			if( replacement != text ) Debug.WriteLine( $"Removed {text.Length-replacement.Length} spurious CR" );
+
+			return replacement;
 		}
+
+		Regex removeRedundantCR = new Regex( "\r+" );
 
 		#endregion
 
@@ -837,6 +821,10 @@ namespace Termulator
 				AppendTextLine( "Send: " + cmd );
 				Stopwatch.Restart();
 
+#if TRACE_SENDS
+				TraceSend( cmd + EnterSequence );
+#endif
+
 				try
 				{
 					Port.Write( cmd + EnterSequence );
@@ -876,7 +864,8 @@ namespace Termulator
 
 		private void copyToClipboardToolStripMenuItem_Click( object sender, EventArgs e )
 		{
-			Clipboard.SetText( TranscriptTextBox.Text );
+			var text = TranscriptTextBox.Text;
+			Clipboard.SetText( text );
 		}
 
 		private void showTimingToolStripMenuItem_Click( object sender, EventArgs e )
@@ -972,7 +961,6 @@ namespace Termulator
 			{
 				Port = Port,
 				AppendTextLine = AppendTextLine,
-
 				Delay = DownloadDelay,
 				Filename = DownloadFilename,
 				TraceDataSent = DownloadTraceDataSent,
@@ -1048,5 +1036,37 @@ namespace Termulator
 		}
 
 		#endregion
+
+		#region // Trace //////////////////////////////////////////////////////
+
+		public bool ShowBinary = false;
+
+		[Conditional( "TRACE_READS" )]
+		public void TraceRead( byte[] bytes, int count )
+		{
+			string s = Encoding.ASCII.GetString( bytes, 0, count );
+			Debug.WriteLine( $"TraceRead[{count}]: {s.Visible()}" );
+
+			if( ShowBinary )
+			{
+				string data = "";
+				for( var i = 0; i < count; i++ )
+				{
+					data += bytes[ i ].ToString( "X2" );
+					if( i > 0 )
+						data += ", ";
+				}
+
+				Debug.WriteLine( $"TraceRead[{count}]: {data}" );
+			}
+		}
+
+		[Conditional( "TRACE_SENDS" )]
+		public void TraceSend( string cmd )
+		{
+			Debug.WriteLine( $"TraceSend[{cmd.Length}]: {cmd.Visible()}" );
+		}
+
+		#endregion
 	}
-}
+	}

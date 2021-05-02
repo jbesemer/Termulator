@@ -11,8 +11,8 @@ namespace Termulator
 
 	public class PortSettings
 	{
-		public const String ObisDefaultPortSettings = "115200,8,-1,0,1,0,1,0,0,0";
-		public const String MeterlessPowerDefaultPortSettings = "9600,8,-1,0,1,0,1,0,0,0";
+		public const String ObisDefaultPortSettings = "115200,8,-1,0,1,0,0,0,0,0";
+		public const String MeterlessPowerDefaultPortSettings = "9600,8,-1,0,1,0,0,0,0,0";
 
 		public const String ParameterSeparator = ",";
 		public readonly char[] NameSeparator = { ':' };
