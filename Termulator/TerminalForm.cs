@@ -29,7 +29,10 @@ namespace Termulator
 	//      convert to WPF
 	//      separate ReaderThread class
 	//      implement Surprise Disconnect
-	//      redirect all keyboard to command box
+	//
+	//      redirect all keyboard input to command box
+	//		per-idn type startup script
+	//		restore normal home/end behavior to command box
 
 	public partial class TerminalForm : Form
 	{
@@ -790,12 +793,18 @@ namespace Termulator
 				break;
 
 			case Keys.Home:
-				CommandHistory.Home();
-				break;
+				if( e.Control ){
+					CommandHistory.Home();	// perform history Home
+					break;
+				}
+				return;     // else NOT handled -- to allow normal editing Home action
 
 			case Keys.End:
-				CommandHistory.End();
-				break;
+				if( e.Control ) { 
+					CommandHistory.End();	// perform history End
+					break;
+				}
+				return;     // else NOT handled -- to allow normal editing End action
 
 			default:
 				return;	// NOT handled
